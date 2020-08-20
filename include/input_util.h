@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-char promt_choice() {
+inline char promt_choice() {
     std::cout << menu::promt_choice;
 
     std::string choice;
@@ -14,7 +14,7 @@ char promt_choice() {
     return choice[0];
 }
 
-void wait_for_enter() {
+inline void wait_for_enter() {
     std::cout << menu::promt_enter;
     std::cin.ignore();
     std::cin.ignore();
