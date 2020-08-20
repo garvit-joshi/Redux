@@ -23,12 +23,10 @@ int main() {
 
         switch (c) {
         case startup_menu_option::Login:
-                promt_login();
+            promt_login();
             break;
         case startup_menu_option::Signup:
-            
-                promt_signup();
-            
+            promt_signup();
             break;
         case startup_menu_option::About:
             std::cout << menu::about;
