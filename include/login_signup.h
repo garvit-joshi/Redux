@@ -16,14 +16,13 @@ inline void exceeds_attempt_msg() {
 inline void promt_login() {
     user result;
 
-    std::cout << menu::promt_username;
-    std::cin >> result.name;
+    result.name = promt_msg(menu::promt_username);
 
     int username_attempt = 1;
     while (!account::exists(result)) {
         std::cerr << result.name << "' account not exists\n";
-        std::cout << menu::promt_username;
-        std::cin >> result.name;
+        
+        result.name = promt_msg(menu::promt_username);
 
         if (++username_attempt == 3) {
             exceeds_attempt_msg();
@@ -31,14 +30,13 @@ inline void promt_login() {
         }
     }
 
-    std::cout << menu::promt_password;
-    std::cin >> result.password;
+    result.password = promt_msg(menu::promt_password);
 
     int password_attempt = 1;
     while (!account::valid_password(result)) {
         std::cout << "password not correct\n";
-        std::cout << menu::promt_password;
-        std::cin >> result.password;
+        
+       result.password = promt_msg(menu::promt_password);
 
         if (++password_attempt == 3) {
             exceeds_attempt_msg();
@@ -52,14 +50,13 @@ inline void promt_login() {
 inline void promt_signup() {
     user result;
 
-    std::cout << menu::promt_username;
-    std::cin >> result.name;
+    result.name = promt_msg(menu::promt_username);
 
     int username_attempt = 1;
     while (account::exists(result)) {
         std::cout << result.name << " already exists.\n";
-        std::cout << menu::promt_username;
-        std::cin >> result.name;
+        
+        result.name = promt_msg(menu::promt_username);
 
         if (++username_attempt == 3) {
             exceeds_attempt_msg();
@@ -67,15 +64,14 @@ inline void promt_signup() {
         }
     }
 
-    std::cout << menu::promt_password;
-    std::cin >> result.password;
+    result.password = promt_msg(menu::promt_password);
 
     int password_attempt = 1;
     const int min_pass_len = 8;
     while (result.password.size() < min_pass_len) {
         std::cerr << "Minimum password length is " << min_pass_len << '\n';
-        std::cout << menu::promt_password;
-        std::cin >> result.password;
+        
+        result.password = promt_msg(menu::promt_password);
 
         if (++password_attempt == 3) {
             exceeds_attempt_msg();
