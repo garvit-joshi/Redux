@@ -1,33 +1,46 @@
-#pragma once 
+#pragma once
 
-#include <ostream>
 #include <istream>
+#include <ostream>
 #include <string>
+#include <vector>
 
-struct credentials {
+struct credential {
     std::string company_name;
     std::string username;
     std::string password;
 };
 
-inline std::istream& operator>>(std::istream& is, credentials& credentials) {
-    getline(is, credentials.company_name);
-    getline(is, credentials.username);
-    getline(is, credentials.password);
+inline std::istream& operator>>(std::istream& is, credential& credential) {
+
+    getline(is, credential.company_name);
+    getline(is, credential.username);
+    getline(is, credential.password);
 
     return is;
 }
 
-inline std::ostream& operator<<(std::ostream& os, credentials const& credentials) {
-    return os << credentials.company_name << '\n'
-              << credentials.username << '\n'
-              << credentials.password << '\n';
+inline std::vector<credential> read_credentials(std::istream&& is) {
+    std::vector<credential> result;
+
+    credential credential;
+    while (is >> credential) {
+        result.push_back(credential);
+    }
+
+    return result;
 }
 
-inline void write_credentials_to_file(std::ostream&& os, credentials const& credentials) {
-    os << credentials;
+inline std::ostream& operator<<(std::ostream& os,
+                                credential const& credential) {
+    return os << credential.company_name << '\n'
+              << credential.username << '\n'
+              << credential.password << '\n';
 }
 
-inline void read_credentials_from_file(std::istream&& is, credentials& credentials) {
-    is >> credentials;
+inline void write_credentials(std::ostream&& os,
+                              std::vector<credential> const& credentials) {
+    for (auto const& cre : credentials) {
+        os << cre;
+    }
 }
