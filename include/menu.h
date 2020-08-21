@@ -31,6 +31,7 @@ namespace menu {
 
     )";
     
+    constexpr static char const* const todo = "Feature not implemented.\n";
     constexpr static char const* const outro = "Thanks for using Redux.\n";
     constexpr static char const* const promt_enter = "\nPress Enter to continue...";
     constexpr static char const* const exceeds_attempt = "Exceeds attempts going back to start menu\n";
