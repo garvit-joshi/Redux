@@ -52,7 +52,14 @@ inline void services(user const& user) {
 }
 
 void print_credentials(user const& user) {
-    decrypt(user.name + "_data", user.password);
+    std::string data_file = user.name + "_data";
+    if (!exists(std::filesystem::path{data_file})) {
+        wait_for_enter();
+        return;
+    }
+    
+
+    decrypt(data_file, user.password);
     
     std::cout << menu::clear_screen;
     for (auto const& cre : read_credentials(std::ifstream{user.name + "_data"})) {
@@ -61,7 +68,7 @@ void print_credentials(user const& user) {
                   << "Password    : " << cre.password << "\n\n";
     }
     
-    encrypt(user.name + "_data", user.password);
+    encrypt(data_file, user.password);
     
     wait_for_enter();
 }
@@ -70,6 +77,10 @@ void add_credentials(user const& user) {
     std::cout << menu::clear_screen
               << menu::ask_num_of_credentials;
     unsigned number_of_credentials = promt_num();
+    
+    if (!number_of_credentials) {
+        return;
+    }
 
     std::vector<credential> credentials_to_append;
     
@@ -83,7 +94,11 @@ void add_credentials(user const& user) {
         credentials_to_append.push_back(credential);
     }
     
-    decrypt(user.name + "_data", user.password);
-    write_credentials(std::ofstream{user.name + "_data", std::ios::app}, credentials_to_append);
-    encrypt(user.name + "_data", user.password);
+    std::string data_file = user.name + "_data";
+    if (exists(std::filesystem::path{data_file})) {
+        decrypt(user.name + "_data", user.password);
+    }
+    
+    write_credentials(std::ofstream{data_file, std::ios::app}, credentials_to_append);
+    encrypt(data_file, user.password);
 }
