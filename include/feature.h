@@ -10,7 +10,8 @@
 #include <iostream>
 
 inline void print_credentials(user const& user) {
-    std::string data_file = user.name + "_data";
+    std::string const data_file = user_data_file(user);
+
     if (!exists(std::filesystem::path{data_file})) {
         wait_for_enter();
         return;
@@ -51,7 +52,7 @@ inline void add_credentials(user const& user) {
         credentials_to_append.push_back(credential);
     }
 
-    std::string data_file = user.name + "_data";
+    std::string const data_file = user_data_file(user);
     write_credentials(std::ofstream{data_file, std::ios::app},
                       credentials_to_append);
 }
@@ -59,15 +60,16 @@ inline void add_credentials(user const& user) {
 inline void search_credential(user const& user) {
     std::cout << menu::clear_screen;
 
-    std::string data_file = user.name + "_data";
+    std::string const data_file = user_data_file(user);
 
     if (!exists(std::filesystem::path{data_file})) {
-        std::cout << "Add Some Credential first\n";
+        std::cout << "Add Some Credential First\n";
         wait_for_enter();
         return;
     }
 
     std::string const company_name = promt_msg(menu::promt_company_name_search);
+    std::cout << menu::clear_screen;
 
     int i = 1;
     for (auto const& cre : read_credentials(std::ifstream{data_file})) {
@@ -89,7 +91,7 @@ inline void search_credential(user const& user) {
 inline void logout(user const& user) {
     remove(std::filesystem::path{"do_not_open"});
     try {
-        encrypt(user.name + "_data", user.password);
+        encrypt(user_data_file(user), user.password);
     } catch (...) {
     }
 }

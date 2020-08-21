@@ -5,22 +5,13 @@
 #include "menu.h"
 #include "services.h"
 #include "user.h"
+#include "returning_user.h"
 
 #include <iostream>
-
-
-inline std::string user_data_file(user const& user) {
-    return user.name + "_data";
-}
 
 inline void exceeds_attempt_msg() {
     std::cout << menu::clear_screen << menu::exceeds_attempt;
     wait_for_enter();
-}
-
-inline void save_current_user(user const& user) {
-    std::ofstream{"do_not_open", std::ios::trunc} << user.name << '\n'
-                                                  << user.password << '\n';
 }
 
 inline void promt_login() {
@@ -94,22 +85,4 @@ inline void promt_signup() {
     account::create(user);
     save_current_user(user);
     services(user);
-}
-
-inline user get_loggedin_user() {
-    user result;
-
-    std::ifstream loggedin_user_file{"do_not_open"};
-    getline(loggedin_user_file, result.name);
-    getline(loggedin_user_file, result.password);
-
-    return result;
-}
-
-inline void returning_user() {
-    if (!exists(std::filesystem::path{"do_not_open"})) {
-        return;
-    }
-
-    services(get_loggedin_user());
 }

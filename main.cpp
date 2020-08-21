@@ -1,6 +1,7 @@
 #include "input_util.h"
 #include "login_signup.h"
 #include "menu.h"
+#include "returning_user.h"
 
 #include <iostream>
 #include <string>
