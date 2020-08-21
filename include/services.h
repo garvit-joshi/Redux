@@ -1,15 +1,11 @@
 #pragma once
 
-#include "credential.h"
-#include "filecrypt.h"
+#include "feature.h"
 #include "input_util.h"
 #include "menu.h"
 #include "user.h"
 
-#include <algorithm>
-#include <fstream>
 #include <iostream>
-#include <iterator>
 
 enum services_menu_options {
     Add = '1',
@@ -18,10 +14,6 @@ enum services_menu_options {
     Edit,
     Logout,
 };
-
-inline void add_credentials(user const& user);
-inline void print_credentials(user const& user);
-inline void search_a_credential(user const& user);
 
 inline void services(user const& user) {
     char c{services_menu_options::Add};
@@ -42,7 +34,7 @@ inline void services(user const& user) {
             break;
 
         case services_menu_options::Search:
-            search_a_credential(user);
+            search_credential(user);
             break;
 
         case services_menu_options::Edit:
@@ -51,11 +43,7 @@ inline void services(user const& user) {
             break;
 
         case services_menu_options::Logout:
-            remove(std::filesystem::path{"do_not_open"});
-            try {
-                encrypt(user.name + "_data", user.password);
-            } catch (...) {
-            }
+            logout(user);
             return;
 
         default:
@@ -64,93 +52,4 @@ inline void services(user const& user) {
             break;
         }
     }
-}
-
-void print_credentials(user const& user) {
-    std::string data_file = user.name + "_data";
-    if (!exists(std::filesystem::path{data_file})) {
-        wait_for_enter();
-        return;
-    }
-
-    std::cout << menu::clear_screen;
-    int i = 1;
-    for (auto const& cre :
-         read_credentials(std::ifstream{user.name + "_data"})) {
-        std::cout << "=========== " << i++ << " ===========\n"
-                  << "Company name : " << cre.company_name << '\n'
-                  << "Username     : " << cre.username << '\n'
-                  << "Password     : " << cre.password << "\n\n";
-    }
-
-    wait_for_enter();
-}
-
-void add_credentials(user const& user) {
-    std::cout << menu::clear_screen << menu::ask_num_of_credentials;
-    unsigned number_of_credentials = promt_num();
-
-    if (!number_of_credentials) {
-        return;
-    }
-
-    std::vector<credential> credentials_to_append;
-
-    for (unsigned i = 0; i < number_of_credentials; ++i) {
-        std::cout << menu::clear_screen << "Enter credential " << i + 1
-                  << " out of " << number_of_credentials << "\n\n";
-
-        credential credential;
-        credential.company_name = promt_msg(menu::promt_company_name);
-        credential.username = promt_msg(menu::promt_username);
-        credential.password = promt_msg(menu::promt_password);
-
-        credentials_to_append.push_back(credential);
-    }
-
-    std::string data_file = user.name + "_data";
-    write_credentials(std::ofstream{data_file, std::ios::app},
-                      credentials_to_append);
-}
-
-int cred_searcher(credential credential,std::string company)
-{
-    return company.compare(credential.company_name);
-}
-
-
-void search_a_credential(user const& user) {
-
-    std::string company;
-
-
-    std::vector<credential> all_credentials;
-
-    std::string data_file = user.name + "_data";
-    if (!exists(std::filesystem::path{data_file})) {
-        wait_for_enter();
-        return;
-    }
-
-    std::cout << menu::clear_screen;
-
-    company = promt_msg(menu::promt_company_name_search);
-
-
-    int i = 1;
-    for (auto const& cre :
-        read_credentials(std::ifstream{user.name + "_data"})) {
-            if(cred_searcher(cre,company)==0)
-            {
-                std::cout << "=========== " << i++ << " ===========\n"
-                  << "Company name : " << cre.company_name << '\n'
-                  << "Username     : " << cre.username << '\n'
-                  << "Password     : " << cre.password << "\n\n";
-            }
-    }
-    if(i==1)
-    {
-        std::cout<<"No Credential found for the given search settings\n";
-    }
-    wait_for_enter();
 }
