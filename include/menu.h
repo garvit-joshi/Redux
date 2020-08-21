@@ -14,9 +14,11 @@ namespace menu {
     
     constexpr static char const* const features_menu = R"(
             ------------------------
-            1. Add Credential(s)
-            2. Print Credential(s)
-            3. Back
+            1. Add Credential.
+            2. Print all Credential.
+            3. Search Credential.
+            4. Edit Credential.
+            5. Logout.
 
     )";
 
