@@ -16,7 +16,9 @@
 enum services_menu_options {
     Add = '1',
     Print,
-    Back,
+    Search,
+    Edit,
+    Logout,
 };
 
 inline void add_credentials(user const& user);
@@ -24,8 +26,7 @@ inline void print_credentials(user const& user);
 
 inline void services(user const& user) {
     char c{services_menu_options::Add};
-    while (c != services_menu_options::Back) {
-        
+    while (c != services_menu_options::Logout) {
         std::cout << menu::clear_screen << menu::welcome_msg 
                   << user.name << '\n'<< menu::features_menu;
         c = promt_choice();
@@ -40,7 +41,21 @@ inline void services(user const& user) {
             print_credentials(user);
             break;
 
-        case services_menu_options::Back:
+        case services_menu_options::Search:
+            std::cout << menu::todo;
+            wait_for_enter();
+            break;
+
+        case services_menu_options::Edit:
+            std::cout << menu::todo;
+            wait_for_enter();
+            break;
+            
+        case services_menu_options::Logout:
+            remove(std::filesystem::path{"do_not_open"});
+            try {
+            encrypt(user.name + "_data", user.password);
+            } catch(...) {}
             return;
 
         default:
@@ -58,17 +73,15 @@ void print_credentials(user const& user) {
         return;
     }
     
-
-    decrypt(data_file, user.password);
     
     std::cout << menu::clear_screen;
+    int i = 1;
     for (auto const& cre : read_credentials(std::ifstream{user.name + "_data"})) {
-        std::cout << "Company name: " << cre.company_name << '\n'
-                  << "Username    : " << cre.username << '\n'
-                  << "Password    : " << cre.password << "\n\n";
+        std::cout << "=========== " << i << " ===========\n"
+                  << "Company name : " << cre.company_name << '\n'
+                  << "Username     : " << cre.username << '\n'
+                  << "Password     : " << cre.password << "\n\n";
     }
-    
-    encrypt(data_file, user.password);
     
     wait_for_enter();
 }
@@ -95,10 +108,5 @@ void add_credentials(user const& user) {
     }
     
     std::string data_file = user.name + "_data";
-    if (exists(std::filesystem::path{data_file})) {
-        decrypt(user.name + "_data", user.password);
-    }
-    
     write_credentials(std::ofstream{data_file, std::ios::app}, credentials_to_append);
-    encrypt(data_file, user.password);
 }
