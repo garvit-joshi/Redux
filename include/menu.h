@@ -31,5 +31,6 @@ namespace menu {
     constexpr static char const* const promt_password = "Enter Your Password: ";
     constexpr static char const* const promt_username = "Enter Your Username: ";
     constexpr static char const* const promt_choice   = "Choose Your Option: ";
+    constexpr static char const* const promt_num      = "Enter a number: ";
     constexpr static char const* const promt_invalid  = "That's a invalid Option: ";
 } // namespace menu
