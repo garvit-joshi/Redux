@@ -1,16 +1,12 @@
 #pragma once
 
 #include "account.h"
-#include "user.h"
-#include "menu.h"
 #include "input_util.h"
+#include "menu.h"
+#include "user.h"
+#include "services.h"
 
 #include <iostream>
-
-void after_login_services(user const& user) {
-    std::cout << menu::clear_screen << menu::features_menu;
-    wait_for_enter();
-}
 
 inline void exceeds_attempt_msg() {
     std::cout << menu::clear_screen << menu::exceeds_attempt;
@@ -50,7 +46,7 @@ inline void promt_login() {
         }
     }
 
-    after_login_services(result);
+    services(result);
 }
 
 inline void promt_signup() {
@@ -88,5 +84,5 @@ inline void promt_signup() {
     }
 
     account::create(result);
-    after_login_services(result);
+    services(result);
 }
