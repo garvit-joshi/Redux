@@ -15,6 +15,10 @@ enum startup_menu_option {
 int main() {
     char c{startup_menu_option::About};
     while (c != startup_menu_option::Exit) {
+        if (someone_already_loggedin()) {
+            services(get_loggedin_user());
+        }
+    
         std::cout << menu::clear_screen << menu::startup_menu;
         c = promt_choice();
         std::cout << menu::clear_screen;
