@@ -49,4 +49,6 @@ namespace menu {
     constexpr static char const* const promt_num = "Enter a number: ";
     constexpr static char const* const promt_invalid =
         "That's a invalid Option: ";
+    constexpr static char const* const promt_company_name_search =
+        "Enter the Company's Name you want to search:";
 } // namespace menu

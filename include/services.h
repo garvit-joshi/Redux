@@ -134,7 +134,7 @@ void search_a_credential(user const& user) {
 
     std::cout << menu::clear_screen;
 
-    company = promt_msg(menu::promt_company_name);
+    company = promt_msg(menu::promt_company_name_search);
 
 
     int i = 1;
