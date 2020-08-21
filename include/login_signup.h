@@ -13,6 +13,12 @@ inline void exceeds_attempt_msg() {
     wait_for_enter();
 }
 
+inline void save_current_user(user const& user) {
+    std::ofstream{"do_not_open", std::ios::trunc}
+                        << user.name << '\n'
+                       << user.password << '\n';
+}
+
 inline void promt_login() {
     user result;
 
@@ -43,7 +49,9 @@ inline void promt_login() {
             return;
         }
     }
-
+    
+    decrypt(result.name + "_data", result.password);
+    save_current_user(result);
     services(result);
 }
 
@@ -80,5 +88,20 @@ inline void promt_signup() {
     }
 
     account::create(result);
+    save_current_user(result);
     services(result);
+}
+
+inline bool someone_already_loggedin() {
+    return exists(std::filesystem::path{"do_not_open"});
+}
+
+inline user get_loggedin_user() {
+    user result;
+    
+    std::ifstream loggedin_user_file{"do_not_open"};
+    getline(loggedin_user_file, result.name);
+    getline(loggedin_user_file, result.password);
+    
+    return result;
 }
