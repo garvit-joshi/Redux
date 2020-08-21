@@ -29,9 +29,10 @@ namespace menu {
     constexpr static char const* const outro = "Thanks for using pwdstore.\n";
     constexpr static char const* const promt_enter = "\nPress Enter to continue...";
     constexpr static char const* const exceeds_attempt = "Exceeds attempts going back to start menu\n";
-    constexpr static char const* const ask_num_of_credentials = "Enter the number of credential(s)\nYou want to enter: ";
+    constexpr static char const* const ask_num_of_credentials = "How many credential(s) you want to enter\n";
     constexpr static char const* const welcome_msg = "\n\n\t\t Welcome ";
 
+    constexpr static char const* const promt_company_name = "Enter the Company's Name: ";
     constexpr static char const* const promt_password = "Enter Your Password: ";
     constexpr static char const* const promt_username = "Enter Your Username: ";
     constexpr static char const* const promt_choice   = "Choose Your Option: ";
