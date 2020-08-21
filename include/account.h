@@ -8,14 +8,14 @@
 
 namespace account {
     inline bool valid_password(user const& user) {
-        decrypt(user.name, user.password);
-
-        std::string decrypted_username;
-        getline(std::ifstream{user.name}, decrypted_username);
+        try {
+            decrypt(user.name, user.password);
+        } catch(...) {
+            return false;
+        }
         
         encrypt(user.name, user.password);
-
-        return user.name == decrypted_username;
+        return true;
     }
 
     inline bool exists(user const& user) {
