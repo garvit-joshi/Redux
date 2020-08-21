@@ -21,11 +21,13 @@ inline void add_credentials(user const& user);
 inline void print_credentials(user const& user);
 
 inline void services(user const& user) {
+    std::cout << menu::clear_screen 
+              << menu::welcome_msg << user.name << '\n';
 
     char c{services_menu_options::Add};
     while (c != services_menu_options::Back) {
-        std::cout << menu::clear_screen << "Welcome: " << user.name << '\n'
-                  << menu::features_menu;
+        
+        std::cout << menu::features_menu;
         c = promt_choice();
         std::cout << menu::clear_screen;
 
