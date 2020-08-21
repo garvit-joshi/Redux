@@ -21,6 +21,7 @@ enum services_menu_options {
 
 inline void add_credentials(user const& user);
 inline void print_credentials(user const& user);
+inline void search_a_credential(user const& user);
 
 inline void services(user const& user) {
     char c{services_menu_options::Add};
@@ -41,8 +42,7 @@ inline void services(user const& user) {
             break;
 
         case services_menu_options::Search:
-            std::cout << menu::todo;
-            wait_for_enter();
+            search_a_credential(user);
             break;
 
         case services_menu_options::Edit:
@@ -111,4 +111,46 @@ void add_credentials(user const& user) {
     std::string data_file = user.name + "_data";
     write_credentials(std::ofstream{data_file, std::ios::app},
                       credentials_to_append);
+}
+
+int cred_searcher(credential credential,std::string company)
+{
+    return company.compare(credential.company_name);
+}
+
+
+void search_a_credential(user const& user) {
+
+    std::string company;
+
+
+    std::vector<credential> all_credentials;
+
+    std::string data_file = user.name + "_data";
+    if (!exists(std::filesystem::path{data_file})) {
+        wait_for_enter();
+        return;
+    }
+
+    std::cout << menu::clear_screen;
+
+    company = promt_msg(menu::promt_company_name);
+
+
+    int i = 1;
+    for (auto const& cre :
+        read_credentials(std::ifstream{user.name + "_data"})) {
+            if(cred_searcher(cre,company)==0)
+            {
+                std::cout << "=========== " << i++ << " ===========\n"
+                  << "Company name : " << cre.company_name << '\n'
+                  << "Username     : " << cre.username << '\n'
+                  << "Password     : " << cre.password << "\n\n";
+            }
+    }
+    if(i==1)
+    {
+        std::cout<<"No Credential found for the given search settings\n";
+    }
+    wait_for_enter();
 }
