@@ -1,6 +1,6 @@
+#include "input_util.h"
 #include "login_signup.h"
 #include "menu.h"
-#include "input_util.h"
 
 #include <iostream>
 #include <string>
@@ -18,7 +18,7 @@ int main() {
         if (someone_already_loggedin()) {
             services(get_loggedin_user());
         }
-    
+
         std::cout << menu::clear_screen << menu::startup_menu;
         c = promt_choice();
         std::cout << menu::clear_screen;

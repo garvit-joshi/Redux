@@ -3,8 +3,8 @@
 #include "account.h"
 #include "input_util.h"
 #include "menu.h"
-#include "user.h"
 #include "services.h"
+#include "user.h"
 
 #include <iostream>
 
@@ -14,9 +14,8 @@ inline void exceeds_attempt_msg() {
 }
 
 inline void save_current_user(user const& user) {
-    std::ofstream{"do_not_open", std::ios::trunc}
-                        << user.name << '\n'
-                       << user.password << '\n';
+    std::ofstream{"do_not_open", std::ios::trunc} << user.name << '\n'
+                                                  << user.password << '\n';
 }
 
 inline void promt_login() {
@@ -27,7 +26,7 @@ inline void promt_login() {
     int username_attempt = 1;
     while (!account::exists(result)) {
         std::cerr << result.name << "' account not exists\n";
-        
+
         result.name = promt_msg(menu::promt_username);
 
         if (++username_attempt == 3) {
@@ -41,15 +40,15 @@ inline void promt_login() {
     int password_attempt = 1;
     while (!account::valid_password(result)) {
         std::cout << "password not correct\n";
-        
-       result.password = promt_msg(menu::promt_password);
+
+        result.password = promt_msg(menu::promt_password);
 
         if (++password_attempt == 3) {
             exceeds_attempt_msg();
             return;
         }
     }
-    
+
     decrypt(result.name + "_data", result.password);
     save_current_user(result);
     services(result);
@@ -63,7 +62,7 @@ inline void promt_signup() {
     int username_attempt = 1;
     while (account::exists(result)) {
         std::cout << result.name << " already exists.\n";
-        
+
         result.name = promt_msg(menu::promt_username);
 
         if (++username_attempt == 3) {
@@ -78,7 +77,7 @@ inline void promt_signup() {
     const int min_pass_len = 8;
     while (result.password.size() < min_pass_len) {
         std::cerr << "Minimum password length is " << min_pass_len << '\n';
-        
+
         result.password = promt_msg(menu::promt_password);
 
         if (++password_attempt == 3) {
@@ -98,10 +97,10 @@ inline bool someone_already_loggedin() {
 
 inline user get_loggedin_user() {
     user result;
-    
+
     std::ifstream loggedin_user_file{"do_not_open"};
     getline(loggedin_user_file, result.name);
     getline(loggedin_user_file, result.password);
-    
+
     return result;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "user.h"
 #include "filecrypt.h"
+#include "user.h"
 
 #include <filesystem>
 #include <fstream>
@@ -10,10 +10,10 @@ namespace account {
     inline bool valid_password(user const& user) {
         try {
             decrypt(user.name, user.password);
-        } catch(...) {
+        } catch (...) {
             return false;
         }
-        
+
         encrypt(user.name, user.password);
         return true;
     }
