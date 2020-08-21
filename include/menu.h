@@ -3,7 +3,7 @@
 namespace menu {
     constexpr static char const* const clear_screen = "\033[2J\033[1;1H";
     constexpr static char const* const startup_menu = R"(
-              Welcome
+              Welcome to Redux
             ---------------
             1. Login
             2. Signup
