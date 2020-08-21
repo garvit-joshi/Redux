@@ -25,16 +25,20 @@ int main() {
         case startup_menu_option::Login:
             promt_login();
             break;
+
         case startup_menu_option::Signup:
             promt_signup();
             break;
+
         case startup_menu_option::About:
             std::cout << menu::about;
             wait_for_enter();
             break;
+
         case startup_menu_option::Exit:
             std::cout << menu::outro;
             return EXIT_SUCCESS;
+
         default:
             std::cout << menu::promt_invalid;
             wait_for_enter();
