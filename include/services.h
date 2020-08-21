@@ -12,6 +12,7 @@ enum services_menu_options {
     Print,
     Search,
     Edit,
+    Delete,
     Logout,
 };
 
@@ -39,6 +40,10 @@ inline void services(user const& user) {
 
         case services_menu_options::Edit:
             edit_credential(user);
+            break;
+
+        case services_menu_options::Delete:
+            delete_credential(user);
             break;
 
         case services_menu_options::Logout:
