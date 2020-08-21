@@ -52,4 +52,8 @@ namespace menu {
         "That's a invalid Option: ";
     constexpr static char const* const promt_company_name_search =
         "Enter the Company's Name you want to search: ";
+    constexpr static char const* const promt_company_name_edit =
+        "Enter the Company's Name you want to edit: ";
+    constexpr static char const* const promt_company_name_delete =
+        "Enter the Company's Name you want to delete: ";
 } // namespace menu

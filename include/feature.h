@@ -107,7 +107,7 @@ inline void edit_credential(user const& user) {
 
     std::cout << menu::clear_screen;
 
-    std::string const company_name = promt_msg(menu::promt_company_name_search);
+    std::string const company_name = promt_msg(menu::promt_company_name_edit);
     std::cout << menu::clear_screen;
 
     for (auto& cre : all_credentials) {
@@ -162,7 +162,7 @@ inline void delete_credential(user const& user) {
 
     std::cout << menu::clear_screen;
 
-    std::string const company_name = promt_msg(menu::promt_company_name_search);
+    std::string const company_name = promt_msg(menu::promt_company_name_delete);
     std::cout << menu::clear_screen;
 
     for (auto& cre : all_credentials) {
