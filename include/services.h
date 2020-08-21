@@ -62,7 +62,7 @@ void print_credentials(user const& user) {
 
 void add_credentials(user const& user) {
     std::cout << menu::clear_screen
-              << "Enter the number of credential(s) you want to enter: ";
+              << menu::ask_num_of_credentials;
 
     unsigned number_of_credentials = promt_num();
 
