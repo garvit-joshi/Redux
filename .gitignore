@@ -1,4 +1,3 @@
 *.vscode
-*.exe
+/build
 /compile_commands.json
-/a
