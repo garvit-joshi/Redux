@@ -1,8 +1,5 @@
 #pragma once
 
-#include <iostream>
-using std::cout;
-
 #include <string>
 using std::string;
 using std::wstring;
