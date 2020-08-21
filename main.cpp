@@ -13,8 +13,6 @@ enum startup_menu_option {
 };
 
 int main() {
-    std::cout << menu::clear_screen << menu::startup_menu;
-
     char c{startup_menu_option::About};
     while (c != startup_menu_option::Exit) {
         std::cout << menu::clear_screen << menu::startup_menu;
