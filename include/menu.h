@@ -13,8 +13,10 @@ namespace menu {
     )";
     
     constexpr static char const* const features_menu = R"(
-            ---------------
-            Features comming soon thoda time lagega...
+            ------------------------
+            1. Add Credential(s)
+            2. Print Credential(s)
+            3. Back
 
     )";
 
@@ -27,6 +29,7 @@ namespace menu {
     constexpr static char const* const outro = "Thanks for using pwdstore.\n";
     constexpr static char const* const promt_enter = "\nPress Enter to continue...";
     constexpr static char const* const exceeds_attempt = "Exceeds attempts going back to start menu\n";
+    constexpr static char const* const welcome_msg = "\n\n\t\t Welcome ";
 
     constexpr static char const* const promt_password = "Enter Your Password: ";
     constexpr static char const* const promt_username = "Enter Your Username: ";
