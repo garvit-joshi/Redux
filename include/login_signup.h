@@ -8,6 +8,11 @@
 
 #include <iostream>
 
+
+inline std::string user_data_file(user const& user) {
+    return user.name + "_data";
+}
+
 inline void exceeds_attempt_msg() {
     std::cout << menu::clear_screen << menu::exceeds_attempt;
     wait_for_enter();
@@ -19,15 +24,15 @@ inline void save_current_user(user const& user) {
 }
 
 inline void promt_login() {
-    user result;
+    user user;
 
-    result.name = promt_msg(menu::promt_username);
+    user.name = promt_msg(menu::promt_username);
 
     int username_attempt = 1;
-    while (!account::exists(result)) {
-        std::cerr << result.name << "' account not exists\n";
+    while (!account::exists(user)) {
+        std::cerr << user.name << "' account not exists\n";
 
-        result.name = promt_msg(menu::promt_username);
+        user.name = promt_msg(menu::promt_username);
 
         if (++username_attempt == 3) {
             exceeds_attempt_msg();
@@ -35,13 +40,13 @@ inline void promt_login() {
         }
     }
 
-    result.password = promt_msg(menu::promt_password);
+    user.password = promt_msg(menu::promt_password);
 
     int password_attempt = 1;
-    while (!account::valid_password(result)) {
+    while (!account::valid_password(user)) {
         std::cout << "password not correct\n";
 
-        result.password = promt_msg(menu::promt_password);
+        user.password = promt_msg(menu::promt_password);
 
         if (++password_attempt == 3) {
             exceeds_attempt_msg();
@@ -49,21 +54,21 @@ inline void promt_login() {
         }
     }
 
-    decrypt(result.name + "_data", result.password);
-    save_current_user(result);
-    services(result);
+    decrypt(user_data_file(user), user.password);
+    save_current_user(user);
+    services(user);
 }
 
 inline void promt_signup() {
-    user result;
+    user user;
 
-    result.name = promt_msg(menu::promt_username);
+    user.name = promt_msg(menu::promt_username);
 
     int username_attempt = 1;
-    while (account::exists(result)) {
-        std::cout << result.name << " already exists.\n";
+    while (account::exists(user)) {
+        std::cout << user.name << " already exists.\n";
 
-        result.name = promt_msg(menu::promt_username);
+        user.name = promt_msg(menu::promt_username);
 
         if (++username_attempt == 3) {
             exceeds_attempt_msg();
@@ -71,14 +76,14 @@ inline void promt_signup() {
         }
     }
 
-    result.password = promt_msg(menu::promt_password);
+    user.password = promt_msg(menu::promt_password);
 
     int password_attempt = 1;
-    const int min_pass_len = 8;
-    while (result.password.size() < min_pass_len) {
+    constexpr int min_pass_len = 8;
+    while (user.password.size() < min_pass_len) {
         std::cerr << "Minimum password length is " << min_pass_len << '\n';
 
-        result.password = promt_msg(menu::promt_password);
+        user.password = promt_msg(menu::promt_password);
 
         if (++password_attempt == 3) {
             exceeds_attempt_msg();
@@ -86,13 +91,9 @@ inline void promt_signup() {
         }
     }
 
-    account::create(result);
-    save_current_user(result);
-    services(result);
-}
-
-inline bool someone_already_loggedin() {
-    return exists(std::filesystem::path{"do_not_open"});
+    account::create(user);
+    save_current_user(user);
+    services(user);
 }
 
 inline user get_loggedin_user() {
@@ -103,4 +104,12 @@ inline user get_loggedin_user() {
     getline(loggedin_user_file, result.password);
 
     return result;
+}
+
+inline void returning_user() {
+    if (!exists(std::filesystem::path{"do_not_open"})) {
+        return;
+    }
+
+    services(get_loggedin_user());
 }
