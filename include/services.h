@@ -97,9 +97,9 @@ void add_credentials(user const& user) {
     std::vector<credential> credentials_to_append;
 
     for (unsigned i = 0; i < number_of_credentials; ++i) {
-        std::cout << menu::clear_screen << "Enter credential " << i + 1 << " out of " 
-        << number_of_credentials << "\n\n";
-        
+        std::cout << menu::clear_screen << "Enter credential " << i + 1
+                  << " out of " << number_of_credentials << "\n\n";
+
         credential credential;
         credential.company_name = promt_msg(menu::promt_company_name);
         credential.username = promt_msg(menu::promt_username);
