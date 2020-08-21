@@ -21,9 +21,12 @@ namespace menu {
     )";
 
     constexpr static char const* const about = R"(
-            Program to encrypt your credentials.
+        Redux- A cross-platform Application for storing User-Data.
 
-            created by {apna} {apna} {naam}.
+        Created By-suravj7 and garvit--joshi.
+
+        Git-Hub: https://github.com/garvit-joshi/Redux
+
     )";
     
     constexpr static char const* const outro = "Thanks for using pwdstore.\n";
