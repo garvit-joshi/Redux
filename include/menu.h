@@ -18,7 +18,8 @@ namespace menu {
             2. Print all Credential.
             3. Search Credential.
             4. Edit Credential.
-            5. Logout.
+            5. Delete Credential.
+            6. Logout.
 
     )";
 
