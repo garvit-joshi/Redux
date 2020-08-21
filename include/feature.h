@@ -92,17 +92,20 @@ inline void search_credential(user const& user) {
 inline void edit_credential(user const& user) {
 
     std::string const data_file = user_data_file(user);
-    std::vector<credential> all_credentials=read_credentials(std::ifstream{data_file});
-    char c='N';
-    int i = 1,flag=0;
-
-    std::cout << menu::clear_screen;
 
     if (!exists(std::filesystem::path{data_file})) {
         std::cout << "Add Some Credential First\n";
         wait_for_enter();
         return;
     }
+
+
+    std::vector<credential> all_credentials=read_credentials(std::ifstream{data_file});
+
+    char c='N';
+    int i = 1,flag=0;
+
+    std::cout << menu::clear_screen;
 
     std::string const company_name = promt_msg(menu::promt_company_name_search);
     std::cout << menu::clear_screen;
@@ -139,6 +142,7 @@ inline void edit_credential(user const& user) {
 
     wait_for_enter();
 }
+
 
 inline void logout(user const& user) {
     remove(std::filesystem::path{"do_not_open"});
