@@ -88,6 +88,58 @@ inline void search_credential(user const& user) {
     wait_for_enter();
 }
 
+
+inline void edit_credential(user const& user) {
+
+    std::string const data_file = user_data_file(user);
+    std::vector<credential> all_credentials=read_credentials(std::ifstream{data_file});
+    char c='N';
+    int i = 1,flag=0;
+
+    std::cout << menu::clear_screen;
+
+    if (!exists(std::filesystem::path{data_file})) {
+        std::cout << "Add Some Credential First\n";
+        wait_for_enter();
+        return;
+    }
+
+    std::string const company_name = promt_msg(menu::promt_company_name_search);
+    std::cout << menu::clear_screen;
+
+    for (auto& cre : all_credentials) {
+        if (cre.company_name.find(company_name) != std::string::npos) {
+            std::cout << "=========== " << i++ << " ===========\n"
+                      << "Company name : " << cre.company_name << '\n'
+                      << "Username     : " << cre.username << '\n'
+                      << "Password     : " << cre.password << "\n\n";
+            
+            std::cout<<"Do you want to edit this Credential(y/n):\n";
+            c = promt_choice();
+            if(c=='Y' || c=='y') {
+                cre.company_name = promt_msg(menu::promt_company_name);
+                cre.username = promt_msg(menu::promt_username);
+                cre.password = promt_msg(menu::promt_password);
+                flag=1;
+                std::cout << "\nData has been successfully updated\n";
+            }
+        }
+    }
+
+    if (i == 1) {
+        std::cout << "\nNo Credential found for the given search settings\n";
+    }
+    if( flag==0 && i != 1 ) {
+        std::cout << "\nNo Credential has been edited\n";
+    }
+    else if(flag==1) {
+        write_credentials(std::ofstream{data_file, std::ios::trunc},all_credentials);
+        std::cout << "\nCredential(s) has been edited\n";
+    }
+
+    wait_for_enter();
+}
+
 inline void logout(user const& user) {
     remove(std::filesystem::path{"do_not_open"});
     try {

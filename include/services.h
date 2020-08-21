@@ -38,8 +38,7 @@ inline void services(user const& user) {
             break;
 
         case services_menu_options::Edit:
-            std::cout << menu::todo;
-            wait_for_enter();
+            edit_credential(user);
             break;
 
         case services_menu_options::Logout:
