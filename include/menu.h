@@ -29,7 +29,7 @@ namespace menu {
 
     )";
     
-    constexpr static char const* const outro = "Thanks for using pwdstore.\n";
+    constexpr static char const* const outro = "Thanks for using Redux.\n";
     constexpr static char const* const promt_enter = "\nPress Enter to continue...";
     constexpr static char const* const exceeds_attempt = "Exceeds attempts going back to start menu\n";
     constexpr static char const* const ask_num_of_credentials = "How many credential(s) you want to enter\n";
