@@ -92,6 +92,8 @@ inline void search_credential(user const& user) {
 inline void edit_credential(user const& user) {
 
     std::string const data_file = user_data_file(user);
+    char c='N';
+    int i = 1,flag=0;
 
     if (!exists(std::filesystem::path{data_file})) {
         std::cout << "Add Some Credential First\n";
@@ -102,8 +104,6 @@ inline void edit_credential(user const& user) {
 
     std::vector<credential> all_credentials=read_credentials(std::ifstream{data_file});
 
-    char c='N';
-    int i = 1,flag=0;
 
     std::cout << menu::clear_screen;
 
