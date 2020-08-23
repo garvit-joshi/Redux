@@ -32,7 +32,7 @@ namespace feature::credentials {
         if (num_of_credentials<=0){
             return false;
         }
-        for (unsigned i = 0; i < num_of_credentials; ++i) {
+        for (signed i = 0; i < num_of_credentials; ++i) {
 
             std::cout << str::clear_screen << "Enter credential " << i + 1 << " out of "
                       << num_of_credentials << "\n\n";
