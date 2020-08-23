@@ -9,6 +9,8 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <iostream>
+#include <ios>
 
 namespace file {
     bool exists(std::string const& filename) { return exists(std::filesystem::path{filename}); }
@@ -38,7 +40,7 @@ namespace file::users {
 namespace file::credentials {
 
     static void save(std::string const& filename, std::vector<credential> const& credentials,
-                     std::_Ios_Openmode const mode) {
+                     std::ios_base::openmode const mode) {
         std::ofstream file{filename, mode};
 
         for (auto const& cre : credentials) {
