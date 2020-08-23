@@ -28,7 +28,10 @@ namespace feature::credentials {
     }
 
     bool add(std::vector<credential>& credentials) {
-        unsigned const num_of_credentials = input::choice(str::ask_num_of_credentials);
+        signed const num_of_credentials = input::choice(str::ask_num_of_credentials);
+        if (num_of_credentials<=0){
+            return false;
+        }
         for (unsigned i = 0; i < num_of_credentials; ++i) {
 
             std::cout << str::clear_screen << "Enter credential " << i + 1 << " out of "
