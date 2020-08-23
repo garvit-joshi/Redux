@@ -1,10 +1,8 @@
 # Redux
 A cross-platform Application for storing User-Data.
 
-<h1>
 <details>
-<summary> Building The App from Source: 🔨</summary></h1>
-    <h2><details><summary>Quick Start: Linux</summary></h2>
+<summary> Building The App from Source(Linux): 🔨</summary>
     <h3>Prerequisites:</h3>
     - Cmake <br>
     - g++ 10 <br>
@@ -14,5 +12,4 @@ A cross-platform Application for storing User-Data.
     3. <code>cmake ..</code><br>
     4. <code>make</code><br>
     5. <code>./src/app</code><br>
-    </details>
 </details>
