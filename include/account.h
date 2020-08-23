@@ -1,30 +1,14 @@
-#pragma once
+#ifndef ACCOUNT_H
+#define ACCOUNT_H
 
-#include "filecrypt.h"
-#include "user.h"
+struct user;
 
-#include <filesystem>
-#include <fstream>
+#include <string>
 
 namespace account {
-    inline bool valid_password(user const& user) {
-        try {
-            decrypt(user.name, user.password);
-        } catch (...) {
-            return false;
-        }
-
-        encrypt(user.name, user.password);
-        return true;
-    }
-
-    inline bool exists(user const& user) {
-        return exists(std::filesystem::path{user.name});
-    }
-
-    inline void create(user const& user) {
-        std::ofstream{user.name} << user.name;
-
-        encrypt(user.name, user.password);
-    }
+    bool exists(std::string const& username);
+    bool valid_password(user const&);
+    void create(user const&);
 } // namespace account
+
+#endif // ACCOUNT_H
