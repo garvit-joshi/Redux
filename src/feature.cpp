@@ -9,7 +9,7 @@
 namespace feature::credentials {
     enum confirm {
         yes = 1U,
-        no = 2,
+        no,
     };
 
     static void print(credential const& credential, unsigned const number) {
