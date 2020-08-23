@@ -39,7 +39,7 @@ namespace signup {
         unsigned input_attempt = 1U;
         constexpr auto min_pass_len = 8U;
         while (password.size() < min_pass_len) {
-            std::cout << str::min_pass_len << min_pass_len << '\n';
+            std::cout << str::min_pass_len << min_pass_len << "\n\n";
 
             password = input::line(str::password);
 

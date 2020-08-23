@@ -8,6 +8,7 @@
 #include "user.h"
 
 #include <iostream>
+#include <iomanip>
 
 namespace after_signin_services {
     enum menu {
@@ -33,7 +34,7 @@ namespace after_signin_services {
 
         unsigned choice = menu::add; // making sure choice is not 'logout'.
         while (choice != menu::logout) {
-            std::cout << str::clear_screen << str::after_signin;
+            std::cout << str::clear_screen << str::welcome << std::quoted(user.name) << str::after_signin;
 
             choice = input::choice();
 

@@ -6,7 +6,7 @@
 #include <fstream>
 
 namespace account {
-    bool exists(std::string const& username) { return exists(std::filesystem::path{username}); }
+    bool exists(std::string const& username) { return file::exists(username); }
 
     bool valid_password(user const& user) {
         try {

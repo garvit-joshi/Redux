@@ -7,7 +7,7 @@ namespace str {
     str_type clear_screen = "\033[2J\033[1;1H";
     str_type startup = R"(
               Welcome to Redux
-            ---------------
+            --------------------
             1. Login
             2. Signup
             3. About
@@ -38,32 +38,33 @@ namespace str {
     str_type todo = "Feature not implemented.\n";
     str_type outro = "Thanks for using Redux.\n";
     str_type enter = "Press Enter to continue...";
-    str_type exceeds_attempt = "Exceeds attempts going back to the start menu\n";
-    str_type ask_num_of_credentials = "How many Credential(s) you want to enter\n";
-    str_type welcome = "\n\n\t\t Welcome ";
+    str_type exceeds_attempt = "Exceeds attempts going back to the start menu..\n\n";
+    str_type ask_num_of_credentials = "How many Credential(s) you want to enter: ";
+    str_type welcome = "\n\t\t Welcome ";
 
     str_type password = "Enter your Password: ";
     str_type username = "Enter your Username: ";
 
     str_type choice = "Enter your choice: ";
     str_type empty = "Empty.\n";
-    str_type add_some_credentials = "Add some Credentials first\n";
-    str_type search_term_company = "Enter the Company you're searching for: ";
+    str_type add_some_credentials = "Add some Credentials first\n\n";
+    str_type search_term_company = "Enter the name of Company you're searching for: ";
 
     str_type invalid = "That's an Invalid Option\n\n";
-    str_type try_again = "Wrong Input, Try Again...\n";
+    str_type try_again = "Wrong Input, Try Again...\n\n";
 
     str_type ac_not_exists = "'s account doesn't exists.\n\n";
-    str_type ac_pass_incorrect = "'s password is not correct.\n";
-    str_type ac_already_exists = "'s account is already exists.\n";
+    str_type ac_pass_incorrect = "'s password is not correct.\n\n";
+    str_type ac_already_exists = "'s account is already exists.\n\n";
     str_type min_pass_len = "Minimum password length is ";
 
     str_type credential_to_remove = "Enter the credential id to remove: ";
-    str_type confirm_edit = "Are you sure, you want to edit it.\nPress 1 for yes or 2 for no: ";
-    str_type confirm_remove = "Are you sure, you want to remove it.\n Press 1 for yes or 2 for no: ";    
-    str_type credential_not_found = "Credential not found.\n";
-    str_type credential_to_edit = "Enter the credential id to edit";
-    
+    str_type confirm_edit = "Are you sure, you want to edit it.\n\nPress 1 for yes or 2 for no: ";
+    str_type confirm_remove =
+        "Are you sure, you want to remove it.\n\nPress 1 for yes or 2 for no: ";
+    str_type credential_not_found = "Credential not found.\n\n";
+    str_type credential_to_edit = "Enter the credential id to edit: ";
+
     str_type company_name = "Enter the Company's Name: ";
     str_type company_name_search = "Enter the Company's name you want to search: ";
     str_type company_name_edit = "Enter the Company's name you want to edit: ";
