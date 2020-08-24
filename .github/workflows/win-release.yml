@@ -1,0 +1,21 @@
+name: Windows
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        vcpkg install cryptopp:x64-windows
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake --build . --config Release
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        path: D:\a\Redux\app\build\Release\app.exe
