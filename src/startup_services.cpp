@@ -9,7 +9,7 @@
 
 namespace startup_services {
     enum menu {
-        login = 1U,
+        login = 1,
         signup,
         about,
         exit,
