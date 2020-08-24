@@ -1,10 +1,10 @@
 #include "signup.h"
 #include "account.h"
+#include "after_signin_services.h"
+#include "file.h"
 #include "input.h"
 #include "str.h"
 #include "user.h"
-#include "after_signin_services.h"
-#include "file.h"
 
 #include <iostream>
 #include <utility>
@@ -18,16 +18,15 @@ namespace signup {
     static auto valid_username() {
         std::string username = input::line(str::username);
 
-        unsigned input_attempt = 1U;
+        int input_attempt = 0;
         while (account::exists(username)) {
-            std::cout << username << str::ac_already_exists;
-
-            username = input::line(str::username);
-
             if (++input_attempt == 3) {
                 exceeds_attempt();
                 return std::make_pair(false, std::string{});
             }
+
+            std::cout << username << str::ac_already_exists;
+            username = input::line(str::username);
         }
 
         return std::make_pair(true, username);
@@ -36,17 +35,16 @@ namespace signup {
     static auto valid_password() {
         std::string password = input::line(str::password);
 
-        unsigned input_attempt = 1U;
-        constexpr auto min_pass_len = 8U;
+        int input_attempt = 0;
+        constexpr auto min_pass_len = 8;
         while (password.size() < min_pass_len) {
-            std::cout << str::min_pass_len << min_pass_len << "\n\n";
-
-            password = input::line(str::password);
-
             if (++input_attempt == 3) {
                 exceeds_attempt();
                 return std::make_pair(false, std::string{});
             }
+
+            std::cout << str::min_pass_len << min_pass_len << "\n\n";
+            password = input::line(str::password);
         }
 
         return std::make_pair(true, password);

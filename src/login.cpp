@@ -19,16 +19,15 @@ namespace login {
     static auto valid_username() {
         std::string username = input::line(str::username);
 
-        unsigned input_attempt = 1U;
+        int input_attempt = 0;
         while (!account::exists(username)) {
-            std::cout << username << str::ac_not_exists;
-
-            username = input::line(str::username);
-
             if (++input_attempt == 3) {
                 exceeds_attempt();
                 return std::make_pair(false, std::string{});
             }
+
+            std::cout << username << str::ac_not_exists;
+            username = input::line(str::username);
         }
 
         return std::make_pair(true, username);
@@ -38,16 +37,15 @@ namespace login {
         user user{other.name};
         user.password = input::line(str::password);
 
-        unsigned input_attempt = 1U;
+        int input_attempt = 0;
         while (!account::valid_password(user)) {
-            std::cout << user.name << str::ac_pass_incorrect;
-
-            user.password = input::line(str::password);
-
             if (++input_attempt == 3) {
                 exceeds_attempt();
                 return std::make_pair(false, std::string{});
             }
+
+            std::cout << user.name << str::ac_pass_incorrect;
+            user.password = input::line(str::password);
         }
 
         return std::make_pair(true, user.password);
