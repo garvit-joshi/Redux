@@ -18,4 +18,4 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.1.4
       with:
-        path: D:\a\Redux\app\build\Release\app.exe
+        path: D:\a\Redux\Redux\build\src\Release\app.exe
