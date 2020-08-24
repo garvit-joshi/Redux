@@ -37,7 +37,7 @@ namespace feature::credentials {
             credentials.push_back(get_credential());
         }
 
-        return static_cast<bool>(num_of_credentials);
+        return num_of_credentials > 0;
     }
 
     bool edit(std::vector<credential>& credentials) {
