@@ -8,11 +8,11 @@
 
 namespace feature::credentials {
     enum confirm {
-        yes = 1U,
+        yes = 1,
         no,
     };
 
-    static void print(credential const& credential, unsigned const number) {
+    static void print(credential const& credential, int const number) {
         std::cout << "\n=========== " << number << " ===========\n"
                   << "Company name : " << credential.company_name << '\n'
                   << "Username     : " << credential.username << '\n'
@@ -28,11 +28,8 @@ namespace feature::credentials {
     }
 
     bool add(std::vector<credential>& credentials) {
-        signed const num_of_credentials = input::choice(str::ask_num_of_credentials);
-        if (num_of_credentials<=0){
-            return false;
-        }
-        for (signed i = 0; i < num_of_credentials; ++i) {
+        int const num_of_credentials = input::choice(str::ask_num_of_credentials);
+        for (int i = 0; i < num_of_credentials; ++i) {
 
             std::cout << str::clear_screen << "Enter credential " << i + 1 << " out of "
                       << num_of_credentials << "\n\n";
@@ -40,21 +37,20 @@ namespace feature::credentials {
             credentials.push_back(get_credential());
         }
 
-        return num_of_credentials;
+        return static_cast<bool>(num_of_credentials);
     }
 
     bool edit(std::vector<credential>& credentials) {
-        unsigned const id = input::choice(str::credential_to_edit) - 1U;
-
-        if (id > credentials.size()) {
+        int const id_to_edit = input::choice(str::credential_to_edit);
+        if (!id_to_edit || id_to_edit > credentials.size()) {
             input::enter(str::credential_not_found);
             return false;
         }
 
-        print(credentials[id], id + 1U);
+        print(credentials[id_to_edit - 1], id_to_edit);
         if (input::choice(str::confirm_edit) == confirm::yes) {
             std::cout << str::clear_screen;
-            credentials[id] = get_credential();
+            credentials[id_to_edit - 1] = get_credential();
             return true;
         }
 
@@ -62,16 +58,16 @@ namespace feature::credentials {
     }
 
     bool remove(std::vector<credential>& credentials) {
-        unsigned const id = input::choice(str::credential_to_remove) - 1U;
+        int const id_to_remove = input::choice(str::credential_to_remove);
 
-        if (id > credentials.size()) {
+        if (!id_to_remove || id_to_remove > credentials.size()) {
             input::enter(str::credential_not_found);
             return false;
         }
 
-        print(credentials[id], id + 1U);
+        print(credentials[id_to_remove - 1], id_to_remove);
         if (input::choice(str::confirm_remove) == confirm::yes) {
-            credentials.erase(credentials.begin() + id);
+            credentials.erase(credentials.begin() + id_to_remove - 1);
             return true;
         }
 
@@ -79,7 +75,7 @@ namespace feature::credentials {
     }
 
     void print(std::vector<credential> const& credentials) {
-        unsigned i = 1;
+        int i = 1;
         for (auto const& credential : credentials) {
             print(credential, i++);
         }
@@ -87,9 +83,9 @@ namespace feature::credentials {
         input::enter();
     }
 
-    void search(std::vector<credential> const& credentials) {
+    bool search(std::vector<credential>& credentials) {
         std::string const search_term_company = input::line(str::search_term_company);
-        unsigned i = 1;
+        int i = 1;
         for (auto const& credential : credentials) {
             if (credential.company_name.find(search_term_company) != std::string::npos) {
                 print(credential, i);
@@ -98,5 +94,6 @@ namespace feature::credentials {
         }
 
         input::enter();
+        return false;
     }
 } // namespace feature::credentials
