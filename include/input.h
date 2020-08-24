@@ -6,8 +6,8 @@
 namespace input {
     auto line(char const* msg) -> std::string;
 
-    auto choice(char const* msg) -> unsigned;
-    auto choice() -> unsigned;
+    auto choice(char const* msg) -> int;
+    auto choice() -> int;
 
     auto enter(char const* msg) -> void;
     auto enter() -> void;
