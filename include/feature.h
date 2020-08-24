@@ -12,7 +12,7 @@ namespace feature::credentials {
     bool remove(std::vector<credential>&);
 
     void print(std::vector<credential> const&);
-    void search(std::vector<credential> const&);
+    bool search(std::vector<credential>&);
 } // namespace feature::credentials
 
 #endif // FEATURE_H
