@@ -8,10 +8,10 @@
 
 namespace input {
 
-    static unsigned num(char const* const msg) {
+    static int num(char const* const msg) {
         std::cout << msg;
 
-        unsigned result = 0;
+        int result = 0;
 
         while (!(std::cin >> result)) {
             std::cout << str::try_again << msg;
@@ -49,9 +49,9 @@ namespace input {
         return trim(str);
     }
 
-    unsigned choice() { return num(str::choice); }
+    int choice() { return num(str::choice); }
 
-    unsigned choice(char const* const msg) { return num(msg); }
+    int choice(char const* const msg) { return num(msg); }
 
     void enter(char const* const msg) {
         std::cout << msg << str::enter;
