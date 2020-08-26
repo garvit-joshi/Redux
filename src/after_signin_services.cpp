@@ -64,6 +64,7 @@ namespace after_signin_services {
                 break;
 
             case menu::edit:
+                fec::print(credentials,2);
                 save(execute(fec::edit), fic::write);
                 break;
 
