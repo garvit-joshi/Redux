@@ -74,13 +74,13 @@ namespace feature::credentials {
         return false;
     }
 
-    void print(std::vector<credential> const& credentials) {
+    void print(std::vector<credential> const& credentials,int operation) {
         int i = 1;
         for (auto const& credential : credentials) {
             print(credential, i++);
         }
-
-        input::enter();
+        if(operation==1)
+            input::enter();
     }
 
     bool search(std::vector<credential>& credentials) {

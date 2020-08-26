@@ -68,6 +68,7 @@ namespace after_signin_services {
                 break;
 
             case menu::remove:
+                fec::print(credentials,2);
                 save(execute(fec::remove), fic::write);
                 break;
 
