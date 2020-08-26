@@ -11,7 +11,7 @@ namespace feature::credentials {
     bool edit(std::vector<credential>&);
     bool remove(std::vector<credential>&);
 
-    void print(std::vector<credential> const&);
+    void print(std::vector<credential> const&,int = 1);
     bool search(std::vector<credential>&);
 } // namespace feature::credentials
 
