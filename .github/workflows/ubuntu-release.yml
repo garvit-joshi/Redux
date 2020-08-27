@@ -11,9 +11,11 @@ jobs:
     - name: build
       run: |
         vcpkg install cryptopp
+        sudo apt install g++-10
+        sudo apt install gcc-10
         mkdir build
         cd build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_CXX_COMPILER=g++-10 -DCMAKE_CC_COMPILER=gcc-10
         cmake --build /home/runner/work/Redux/Redux/build
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
