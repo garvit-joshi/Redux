@@ -19,15 +19,3 @@ jobs:
       uses: actions/upload-artifact@v2.1.4
       with:
         path: D:\a\Redux\Redux\build\src\Release\app.exe
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: build
-      run: |
-        vcpkg install cryptopp
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-        cmake --build . --config Release
