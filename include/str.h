@@ -45,7 +45,7 @@ namespace str {
     str_type about = R"(
         Redux- A cross-platform Application for storing User-Data.
 
-        Created By-suravj7 and garvit--joshi.
+        Created By-sauravj7 and garvit--joshi.
 
         Git-Hub: https://github.com/garvit-joshi/Redux
 
