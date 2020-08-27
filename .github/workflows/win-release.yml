@@ -1,6 +1,6 @@
 name: Windows
 
-on: []
+on: [push]
 
 jobs:
   build:
