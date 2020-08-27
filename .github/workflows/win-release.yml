@@ -19,7 +19,6 @@ jobs:
       uses: actions/upload-artifact@v2.1.4
       with:
         path: D:\a\Redux\Redux\build\src\Release\app.exe
-jobs:
   build:
     runs-on: ubuntu-latest
 
