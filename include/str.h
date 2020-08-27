@@ -1,10 +1,26 @@
 #ifndef STR_H
 #define STR_H
 
+#ifdef _WIN32
+#include <ostream>
+#endif
+
 namespace str {
     using str_type = char const* const;
 
+#ifdef _WIN32
+    struct clear_screen {};
+    constexpr clear_screen clear_screen;
+
+    inline std::ostream& operator<<(std::ostream& os, struct clear_screen const&) {
+        system("cls");
+        return os;
+    }
+
+#else
     str_type clear_screen = "\033[2J\033[1;1H";
+#endif // _WIN32
+
     str_type startup = R"(
               Welcome to Redux
             --------------------
