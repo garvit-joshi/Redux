@@ -7,16 +7,16 @@ A cross-platform Application for storing User-Data.
 ## Building The App from Source(Linux): 🔨
 ### Prerequisites:
     
- 1. CMake >= 3.1 <br>
- 2. g++ >= 8 (CXX standard=17) <br>
- 3. [vcpkg](https://github.com/microsoft/vcpkg)
+* CMake >= 3.1 <br>
+* g++ >= 8 (CXX standard=17) <br>
+* [vcpkg](https://github.com/microsoft/vcpkg)
 
 ### Steps:  
 1. Download [vcpkg](https://github.com/microsoft/vcpkg) and run 
 ```
 /bootstrap-vcpkg.sh
 ```
-2. To install the libraries for your project, run: 
+2. To install the libraries for your project, run the below command in root directory of vcpkg: 
 ```
 ./vcpkg install cryptopp
 ```
@@ -40,9 +40,19 @@ cmake --build /home/username/Repos/Redux/build
 ## Building The App from Source(Windows): 🔨
 ### Prerequisites:
     
-1. CMake >= 3.1 
-2. Microsoft Visual Studio C++ Compiler
-3. [vcpkg](https://github.com/microsoft/vcpkg)
+* CMake >= 3.1 
+* Microsoft Visual Studio 2019
+* [vcpkg](https://github.com/microsoft/vcpkg)
 
 ### Steps:
+1. Download [vcpkg](https://github.com/microsoft/vcpkg) and run ```/bootstrap-vcpkg.bat```
 
+2. For installing required modules, run these commands in root directory of vcpkg
+
+    * ```vcpkg install cryptopp:x64-windows```
+    * ```vcpkg install cryptopp:x64-windows```
+    * ```vcpkg integrate install```
+3. Opening cmd in root directory of Redux, and run these commands assuming your vcpkg is installed in ```C://vcpkg``` and Redux is located in ```D:\Repos\Redux```:
+    * ```cmake -B D:/Repos/Redux/build -S . -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake```
+    * ```cmake --build D:/Repos/Redux/build```
+4. Binaries will be provided in ```Redux/build```.
