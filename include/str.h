@@ -43,11 +43,21 @@ namespace str {
 )";
 
     str_type about = R"(
-        Redux- A cross-platform Application for storing User-Data.
-
-        Created By-sauravj7 and garvit--joshi.
-
-        Git-Hub: https://github.com/garvit-joshi/Redux
+         ||                                                                                         ||
+        =================================================================================================
+         ||                                  Redux                                                  ||
+         ||                                       Version:1.20.08(stable)                           ||
+         ||Dear Users,                                                                              ||
+         ||          Redux is a cross platform application that will store your password in files   ||
+         ||that will be protected with Encryption. Feel free to contact us on any reported bug.     ||
+         ||All the files are compiled and kept ready to use for the sake of your convenience.       ||
+         ||                                                                                         ||
+        =================================================================================================
+         ||  Git-Hub: https://github.com/garvit-joshi/Redux                                         ||
+         ||  Devlopers: Saurav Jha, Garvit Joshi                                                    ||
+         ||                                                                                         ||
+        =================================================================================================
+         ||                                                                                         ||
 
 )";
 
