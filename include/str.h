@@ -41,7 +41,7 @@ namespace str {
             6. Logout.
 
 )";
-
+#ifdef _WIN32
     str_type about = R"(
          ||                                                                                         ||
         =================================================================================================
@@ -58,9 +58,27 @@ namespace str {
          ||                                                                                         ||
         =================================================================================================
          ||                                                                                         ||
-
 )";
-
+#else
+    str_type about = R"(
+     ||                                                                ||
+   ========================================================================
+     ||                 Redux                                          ||
+     ||                      Version:1.20.08(stable)                   ||
+     ||Dear Users,                                                     ||
+     ||          Redux is a cross platform application that will store ||
+     ||your password in files that will be protected with Encryption.  ||
+     ||Feel free to contact us on any reported bug.                    ||
+     ||   Making Binary for Linux is provided in Readme.md file of     ||
+     ||this project.                                                   ||
+   ========================================================================
+     ||  Git-Hub: https://github.com/garvit-joshi/Redux                ||
+     ||  Devlopers: Saurav Jha, Garvit Joshi                           ||
+     ||                                                                ||
+   ========================================================================
+     ||                                                                ||
+)";
+#endif
     str_type todo = "Feature not implemented.\n";
     str_type outro = "Thanks for using Redux.\n";
     str_type enter = "Press Enter to continue...";
