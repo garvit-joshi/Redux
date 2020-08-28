@@ -16,7 +16,7 @@ A cross-platform Application for storing User-Data.
 ```
 /bootstrap-vcpkg.sh
 ```
-2. To install the libraries for your project, run the below command in root directory of vcpkg: 
+2. To install the libraries for your project, run the below command in the root directory of vcpkg: 
 ```
 ./vcpkg install cryptopp
 ```
@@ -47,10 +47,10 @@ cmake --build /home/username/Repos/Redux/build
 ### Steps:
 1. Download [vcpkg](https://github.com/microsoft/vcpkg) and run ```/bootstrap-vcpkg.bat```
 
-2. For installing required modules, run these commands in root directory of vcpkg
+2. For installing required modules, run these commands in the root directory of vcpkg:
 
     * ```vcpkg install cryptopp:x64-windows```
-    * ```vcpkg install cryptopp:x64-windows```
+    * ```vcpkg install cryptopp:x86-windows```
     * ```vcpkg integrate install```
 3. Opening cmd in root directory of Redux, and run these commands assuming your vcpkg is installed in ```C://vcpkg``` and Redux is located in ```D:\Repos\Redux```:
     * ```cmake -B D:/Repos/Redux/build -S . -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake```
