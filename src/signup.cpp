@@ -7,6 +7,7 @@
 #include "user.h"
 
 #include <iostream>
+#include <string>
 #include <utility>
 
 namespace signup {
@@ -32,7 +33,7 @@ namespace signup {
         return std::make_pair(true, username);
     }
 
-    static auto valid_password() {
+    std::pair<bool, std::string> valid_password() {
         std::string password = input::line(str::password);
 
         int input_attempt = 0;
@@ -40,14 +41,14 @@ namespace signup {
         while (password.size() < min_pass_len) {
             if (++input_attempt == 3) {
                 exceeds_attempt();
-                return std::make_pair(false, std::string{});
+                return {false, {}};
             }
 
             std::cout << str::min_pass_len << min_pass_len << "\n\n";
             password = input::line(str::password);
         }
 
-        return std::make_pair(true, password);
+        return {true, password};
     }
 
     void promt() {

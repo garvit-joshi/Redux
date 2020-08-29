@@ -27,4 +27,13 @@ namespace account {
 
         file::crypt::encrypt(uf::account(user.name), user.password);
     }
+
+    void change_password(user const& user, std::string const& password) {
+        namespace uf = file::user_files;
+
+        file::remove(uf::account(user.name));
+
+        std::ofstream{uf::account(user.name)} << user.name;
+        file::crypt::encrypt(uf::account(user.name), password);
+    }
 } // namespace account

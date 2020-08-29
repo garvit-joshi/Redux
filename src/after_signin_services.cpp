@@ -17,6 +17,7 @@ namespace after_signin_services {
         search,
         edit,
         remove,
+        change_pass,
         logout,
     };
 
@@ -24,7 +25,6 @@ namespace after_signin_services {
 
         feature feature{file::credentials::read(file::user_files::data(user.name))};
         auto execute = [&](auto func) {
-            
             if (func != &feature::add and feature.get_credentials().empty()) {
                 input::enter(str::add_some_credentials);
                 return;
@@ -67,6 +67,12 @@ namespace after_signin_services {
 
             case menu::remove:
                 execute(&feature::remove);
+                break;
+
+            case change_pass:
+                if (change_password(user)) {
+                    return;
+                }
                 break;
 
             case logout:
