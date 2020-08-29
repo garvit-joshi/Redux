@@ -21,23 +21,13 @@ namespace after_signin_services {
     };
 
     void run(user const& user) {
-        namespace fic = file::credentials;
-        namespace fec = feature::credentials;
 
-        auto credentials = fic::read(file::user_files::data(user.name));
-
-        auto execute = [&credentials](auto operation) {
-            if (credentials.empty()) {
-                input::enter(str::add_some_credentials);
-                return false;
-            }
-
-            return operation(credentials);
-        };
-
-        auto save = [&credentials, &user](bool should_save, auto operation) {
-            if (should_save) {
-                operation(file::user_files::data(user.name), credentials);
+        feature feature{file::credentials::read(file::user_files::data(user.name))};
+        auto execute = [&] (auto func) {
+            (feature.*func)();
+            if (feature.is_modified()) {
+                file::credentials::write(file::user_files::data(user.name), feature.get_credentials());
+                feature.unset_modified();
             }
         };
 
@@ -52,25 +42,23 @@ namespace after_signin_services {
 
             switch (choice) {
             case menu::add:
-                save(fec::add(credentials), fic::append);
+                execute(&feature::add);
                 break;
 
             case menu::print:
-                fec::print(credentials);
+                execute(&feature::print);
                 break;
 
             case menu::search:
-                execute(fec::search);
+                execute(&feature::search);
                 break;
 
             case menu::edit:
-                fec::print(credentials,2);
-                save(execute(fec::edit), fic::write);
+                execute(&feature::edit);
                 break;
 
             case menu::remove:
-                fec::print(credentials,2);
-                save(execute(fec::remove), fic::write);
+                execute(&feature::remove);
                 break;
 
             case logout:

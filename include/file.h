@@ -1,11 +1,11 @@
 #ifndef FILE_H
 #define FILE_H
 
-struct user;
-struct credential;
-
 #include <string>
 #include <vector>
+
+struct user;
+struct credential;
 
 namespace file {
     bool exists(std::string const& filename);

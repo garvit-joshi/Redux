@@ -1,18 +1,30 @@
 #ifndef FEATURE_H
 #define FEATURE_H
 
+#include <vector>
+
 struct credential;
 struct user;
 
-#include <vector>
+class feature {
+public:
+    explicit feature(std::vector<credential>&& credentials_)
+        : credentials{std::move(credentials_)} {}
 
-namespace feature::credentials {
-    bool add(std::vector<credential>&);
-    bool edit(std::vector<credential>&);
-    bool remove(std::vector<credential>&);
+    void add();
+    void edit();
+    void remove();
+    void search() const;
+    void print() const;
 
-    void print(std::vector<credential> const&,int = 1);
-    bool search(std::vector<credential>&);
-} // namespace feature::credentials
+    [[nodiscard]] bool is_modified() const;
+    void unset_modified();
+
+    [[nodiscard]] std::vector<credential> const& get_credentials() const;
+
+private:
+    std::vector<credential> credentials;
+    bool modified = false;
+};
 
 #endif // FEATURE_H
