@@ -71,7 +71,7 @@ void feature::remove() {
     }
 }
 
-void feature::print() const {
+void feature::print() {
     int i = 1;
     for (auto const& credential : credentials) {
         print_credential(credential, i++);
@@ -80,7 +80,7 @@ void feature::print() const {
     input::enter();
 }
 
-void feature::search() const {
+void feature::search() {
     std::string const search_term_company = input::line(str::search_term_company);
     int i = 1;
     for (auto const& credential : credentials) {

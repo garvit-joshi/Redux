@@ -23,10 +23,18 @@ namespace after_signin_services {
     void run(user const& user) {
 
         feature feature{file::credentials::read(file::user_files::data(user.name))};
-        auto execute = [&] (auto func) {
+        auto execute = [&](auto func) {
+            
+            if (func != &feature::add and feature.get_credentials().empty()) {
+                input::enter(str::add_some_credentials);
+                return;
+            }
+
             (feature.*func)();
+
             if (feature.is_modified()) {
-                file::credentials::write(file::user_files::data(user.name), feature.get_credentials());
+                file::credentials::write(file::user_files::data(user.name),
+                                         feature.get_credentials());
                 feature.unset_modified();
             }
         };

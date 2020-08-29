@@ -14,8 +14,8 @@ public:
     void add();
     void edit();
     void remove();
-    void search() const;
-    void print() const;
+    void search();
+    void print();
 
     [[nodiscard]] bool is_modified() const;
     void unset_modified();
