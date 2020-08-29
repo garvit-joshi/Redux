@@ -25,7 +25,7 @@ namespace after_signin_services {
 
         feature feature{file::credentials::read(file::user_files::data(user.name))};
         auto execute = [&](auto func) {
-            if (func != &feature::add and feature.get_credentials().empty()) {
+            if (func != &feature::add && feature.get_credentials().empty()) {
                 input::enter(str::add_some_credentials);
                 return;
             }
