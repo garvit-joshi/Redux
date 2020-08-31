@@ -38,7 +38,8 @@ namespace str {
             3. Search Credential.
             4. Edit Credential.
             5. Delete Credential.
-            6. Logout.
+            6. Change Password
+            7. Logout.
 
 )";
 #ifdef _WIN32
