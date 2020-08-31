@@ -4,6 +4,7 @@
 #include "str.h"
 #include "user.h"
 
+#include <algorithm>
 #include <iostream>
 
 enum confirm {
@@ -28,20 +29,24 @@ static credential get_credential() {
 
 void feature::add() {
     int const num_of_credentials = input::choice(str::ask_num_of_credentials);
-    for (int i = 0; i < num_of_credentials; ++i) {
-
-        std::cout << str::clear_screen << "Enter credential " << i + 1 << " out of "
+    generate_n(back_inserter(credentials), num_of_credentials, [&, n = 1]() mutable {
+        std::cout << str::clear_screen << "Enter credential " << n << " out of "
                   << num_of_credentials << "\n\n";
-
-        credentials.push_back(get_credential());
-    }
+        ++n;
+        return get_credential();
+    });
 
     modified = num_of_credentials > 0;
 }
 
+static bool invalid_id(std::vector<credential> const& credentials, int const id) {
+    return id < 1 || id > credentials.size();
+}
+
 void feature::edit() {
     int const id_to_edit = input::choice(str::credential_to_edit);
-    if (!id_to_edit || id_to_edit > credentials.size()) {
+
+    if (invalid_id(credentials, id_to_edit)) {
         input::enter(str::credential_not_found);
         return;
     }
@@ -58,37 +63,38 @@ void feature::edit() {
 void feature::remove() {
     int const id_to_remove = input::choice(str::credential_to_remove);
 
-    if (!id_to_remove || id_to_remove > credentials.size()) {
+    if (invalid_id(credentials, id_to_remove)) {
         input::enter(str::credential_not_found);
         return;
     }
 
     print_credential(credentials[id_to_remove - 1], id_to_remove);
     if (input::choice(str::confirm_remove) == confirm::yes) {
-        credentials.erase(credentials.begin() + id_to_remove - 1);
+        credentials[id_to_remove - 1] = std::move(credentials.back());
+        credentials.pop_back();
 
         modified = true;
     }
 }
 
 void feature::print() {
-    int i = 1;
-    for (auto const& credential : credentials) {
-        print_credential(credential, i++);
-    }
+    for_each(cbegin(credentials), cend(credentials), [n = 1](auto const& credential) mutable {
+        print_credential(credential, n);
+        ++n;
+    });
 
     input::enter();
 }
 
 void feature::search() {
     std::string const search_term_company = input::line(str::search_term_company);
-    int i = 1;
-    for (auto const& credential : credentials) {
+
+    for_each(cbegin(credentials), cend(credentials), [&, n = 1](auto const& credential) mutable {
         if (credential.company_name.find(search_term_company) != std::string::npos) {
-            print_credential(credential, i);
+            print_credential(credential, n);
         }
-        ++i;
-    }
+        ++n;
+    });
 
     input::enter();
 }
@@ -97,6 +103,4 @@ bool feature::is_modified() const { return modified; }
 
 void feature::unset_modified() { modified = false; }
 
-std::vector<credential> const& feature::get_credentials() const {
-    return credentials;
-}
+std::vector<credential> const& feature::get_credentials() const { return credentials; }
