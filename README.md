@@ -53,6 +53,6 @@ cmake --build /home/username/Repos/Redux/build
     * ```vcpkg install cryptopp:x86-windows```
     * ```vcpkg integrate install```
 3. Opening cmd in root directory of Redux, and run these commands assuming your vcpkg is installed in ```C://vcpkg``` and Redux is located in ```D:\Repos\Redux```:
-    * ```cmake -B D:/Repos/Redux/build -S . -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake```
+    * ``` cmake -B D:/Repos/Redux/build -S . -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ```
     * ```cmake --build D:/Repos/Redux/build```
 4. Binaries will be provided in ```Redux/build```.
