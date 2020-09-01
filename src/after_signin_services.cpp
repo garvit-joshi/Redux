@@ -22,22 +22,7 @@ namespace after_signin_services {
     };
 
     void run(user const& user) {
-
-        feature feature{file::credentials::read(file::user_files::data(user.name))};
-        auto execute = [&](auto func) {
-            if (func != &feature::add && feature.get_credentials().empty()) {
-                input::enter(str::add_some_credentials);
-                return;
-            }
-
-            (feature.*func)();
-
-            if (feature.is_modified()) {
-                file::credentials::write(file::user_files::data(user.name),
-                                         feature.get_credentials());
-                feature.unset_modified();
-            }
-        };
+        feature feature{user.name};
 
         unsigned choice = menu::add; // making sure choice is not 'logout'.
         while (choice != menu::logout) {
@@ -50,23 +35,23 @@ namespace after_signin_services {
 
             switch (choice) {
             case menu::add:
-                execute(&feature::add);
+                feature.add();
                 break;
 
             case menu::print:
-                execute(&feature::print);
+                feature.print();
                 break;
 
             case menu::search:
-                execute(&feature::search);
+                feature.search();
                 break;
 
             case menu::edit:
-                execute(&feature::edit);
+                feature.edit();
                 break;
 
             case menu::remove:
-                execute(&feature::remove);
+                feature.remove();
                 break;
 
             case change_pass:
