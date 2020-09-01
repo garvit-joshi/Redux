@@ -41,19 +41,14 @@ namespace file::credentials {
 
     static void save(std::string const& filename, std::vector<credential> const& credentials,
                      std::ios_base::openmode const mode) {
-        std::ofstream file{filename, mode};
+    }
+
+    void write(std::string const& filename, std::vector<credential> const& credentials) {
+        std::ofstream file{filename};
 
         for (auto const& cre : credentials) {
             file << cre;
         }
-    }
-
-    void write(std::string const& filename, std::vector<credential> const& credentials) {
-        save(filename, credentials, std::ios::trunc);
-    }
-
-    void append(std::string const& filename, std::vector<credential> const& credentials) {
-        save(filename, credentials, std::ios::app);
     }
 
     std::vector<credential> read(std::string const& filename) {
