@@ -8,9 +8,7 @@
 
 #include <filesystem>
 #include <fstream>
-#include <string>
 #include <iostream>
-#include <ios>
 
 
 namespace file::user_files {
@@ -33,11 +31,6 @@ namespace file::users {
 } // namespace file::users
 
 namespace file::credentials {
-
-    static void save(std::string const& filename, std::vector<credential> const& credentials,
-                     std::ios_base::openmode const mode) {
-    }
-
     void write(std::string const& filename, std::vector<credential> const& credentials) {
         std::ofstream file{filename};
 
