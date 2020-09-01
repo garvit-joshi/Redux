@@ -6,11 +6,12 @@
 #include "str.h"
 #include "user.h"
 
+#include <filesystem>
 #include <string>
 #include <utility>
 
 void user_logout(user const& user) {
-    file::remove(file::user_files::returning_user());
+    std::filesystem::remove(file::user_files::returning_user());
     file::crypt::encrypt(file::user_files::data(user.name), user.password);
 }
 

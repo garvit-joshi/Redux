@@ -7,12 +7,6 @@
 struct user;
 struct credential;
 
-namespace file {
-    bool exists(std::string const& filename);
-    void remove(std::string const& filename);
-    bool empty(std::string const& filename);
-} // namespace file
-
 namespace file::credentials {
     void write(std::string const& filename, std::vector<credential> const&);
     void append(std::string const&, std::vector<credential> const&);

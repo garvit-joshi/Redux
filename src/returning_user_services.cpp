@@ -3,9 +3,11 @@
 #include "after_signin_services.h"
 #include "file.h"
 
+#include <filesystem>
+
 namespace returning_user_services {
     static bool returning_user() {
-        return file::exists(file::user_files::returning_user());
+        return std::filesystem::exists(file::user_files::returning_user());
     }
 
     static user get_returning_user() {

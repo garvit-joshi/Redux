@@ -12,11 +12,6 @@
 #include <iostream>
 #include <ios>
 
-namespace file {
-    bool exists(std::string const& filename) { return exists(std::filesystem::path{filename}); }
-    void remove(std::string const& filename) { remove(std::filesystem::path{filename}); }
-    bool empty(std::string const& filename) { return is_empty(std::filesystem::path{filename}); }
-} // namespace file
 
 namespace file::user_files {
     std::string data(std::string const& username) { return username + "_data"; }
@@ -70,7 +65,7 @@ namespace file::crypt {
     void encrypt(std::string const& filename, std::string const& password) {
         using namespace CryptoPP;
 
-        if (file::empty(filename)) {
+        if (std::filesystem::is_empty(filename)) {
             return;
         }
 
@@ -85,7 +80,7 @@ namespace file::crypt {
     void decrypt(std::string const& filename, std::string const& password) {
         using namespace CryptoPP;
 
-        if (file::empty(filename)) {
+        if (std::filesystem::is_empty(filename)) {
             return;
         }
 

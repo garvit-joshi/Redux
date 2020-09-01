@@ -6,7 +6,7 @@
 #include <fstream>
 
 namespace account {
-    bool exists(std::string const& username) { return file::exists(username); }
+    bool exists(std::string const& username) { return std::filesystem::exists(username); }
 
     bool valid_password(user const& user) {
         try {
@@ -31,7 +31,7 @@ namespace account {
     void change_password(user const& user, std::string const& password) {
         namespace uf = file::user_files;
 
-        file::remove(uf::account(user.name));
+        std::filesystem::remove(uf::account(user.name));
 
         std::ofstream{uf::account(user.name)} << user.name;
         file::crypt::encrypt(uf::account(user.name), password);
