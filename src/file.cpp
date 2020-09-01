@@ -42,7 +42,7 @@ namespace file::credentials {
     std::vector<credential> read(std::string const& filename) {
         std::vector<credential> result;
 
-        std::ifstream file{filename, std::ios::app};
+        std::ifstream file{filename};
 
         credential credential;
         while (file >> credential) {
