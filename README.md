@@ -14,7 +14,7 @@ A cross-platform Application for storing User-Data.
 ### Steps:  
 1. Download [vcpkg](https://github.com/microsoft/vcpkg) and run 
 ```
-/bootstrap-vcpkg.sh
+./bootstrap-vcpkg.sh
 ```
 2. To install the libraries for your project, run the below command in the root directory of vcpkg: 
 ```
