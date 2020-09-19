@@ -57,7 +57,7 @@ cmake --build /home/username/Repos/Redux/build
     * ```cmake --build D:/Repos/Redux/build```
 4. Binaries will be provided in ```Redux/build```.
 
-### Notes (if using Pre-Build Binaries for Windows):
+## Notes (if using Pre-Build Binaries for Windows):
 
 1. Please Install **Microsoft Visual C++ Redistributable for Visual Studio 2019** before running binaries:
     1. For [x64](https://aka.ms/vs/16/release/VC_redist.x64.exe),
