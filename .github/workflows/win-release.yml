@@ -15,7 +15,7 @@ jobs:
         cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
         cmake --build . --config Release
-    - name: Upload a Build Artifact
+    - name: Windows Application
       uses: actions/upload-artifact@v2
       with:
         path: D:\a\Redux\Redux\build\src\Release\app.exe
