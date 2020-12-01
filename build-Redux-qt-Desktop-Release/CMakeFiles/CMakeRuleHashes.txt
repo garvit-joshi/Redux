@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-9d8b7278eb39cd0f642dd3acec61446e /home/garvit-joshi/Repos/QT-Test/Redux-qt/Redux-qt_en_IN.ts
-ba2cc19a47c41e964d39eab380df2c02 CMakeFiles/Redux-qt_autogen
