@@ -2,3 +2,5 @@
 /.clangd
 /build
 /compile_commands.json
+/build-Redux-Desktop-Debug
+/build-Redux-Desktop-Release
