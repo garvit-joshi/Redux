@@ -1,0 +1,1 @@
+/usr/bin/g++ -O3 -DNDEBUG CMakeFiles/Redux-qt.dir/Redux-qt_autogen/mocs_compilation.cpp.o CMakeFiles/Redux-qt.dir/main.cpp.o CMakeFiles/Redux-qt.dir/mainwindow.cpp.o -o Redux-qt  /usr/lib/libQt5Widgets.so.5.15.2 /usr/lib/libQt5Gui.so.5.15.2 /usr/lib/libQt5Core.so.5.15.2 

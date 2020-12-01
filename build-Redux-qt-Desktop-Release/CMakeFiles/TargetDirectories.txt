@@ -1,0 +1,4 @@
+/home/garvit-joshi/Repos/QT-Test/build-Redux-qt-Desktop-Release/CMakeFiles/rebuild_cache.dir
+/home/garvit-joshi/Repos/QT-Test/build-Redux-qt-Desktop-Release/CMakeFiles/edit_cache.dir
+/home/garvit-joshi/Repos/QT-Test/build-Redux-qt-Desktop-Release/CMakeFiles/Redux-qt.dir
+/home/garvit-joshi/Repos/QT-Test/build-Redux-qt-Desktop-Release/CMakeFiles/Redux-qt_autogen.dir
