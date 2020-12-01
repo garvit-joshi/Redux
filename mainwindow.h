@@ -18,6 +18,12 @@ public:
 private slots:
     void on_pushExit_clicked();
 
+    void on_pushAbout_clicked();
+
+    void on_actionAbout_triggered();
+
+    void on_actionLicense_triggered();
+
 private:
     Ui::MainWindow *ui;
 };
