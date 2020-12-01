@@ -44,12 +44,27 @@
     <property name="geometry">
      <rect>
       <x>19</x>
-      <y>470</y>
+      <y>460</y>
       <width>751</width>
-      <height>61</height>
+      <height>74</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>300</number>
+     </property>
+     <property name="leftMargin">
+      <number>20</number>
+     </property>
+     <property name="topMargin">
+      <number>20</number>
+     </property>
+     <property name="rightMargin">
+      <number>20</number>
+     </property>
+     <property name="bottomMargin">
+      <number>20</number>
+     </property>
      <item>
       <widget class="QPushButton" name="pushAbout">
        <property name="text">
