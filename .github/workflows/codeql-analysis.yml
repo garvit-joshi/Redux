@@ -49,8 +49,6 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: BuildCPP
-    - uses: actions/checkout@v2
     - run: |
         vcpkg install cryptopp
         sudo apt install g++-10
