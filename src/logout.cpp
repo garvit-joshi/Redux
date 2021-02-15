@@ -17,7 +17,9 @@ void user_logout(user const& user) {
 
 bool change_password(user const& user_) {
     auto [valid, new_password] = signup::valid_password();
-    if (!valid) { return false; }
+    if (!valid) {
+        return false;
+    }
 
     account::change_password(user_, new_password);
 

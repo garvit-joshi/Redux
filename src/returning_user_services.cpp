@@ -1,7 +1,7 @@
 #include "returning_user_services.h"
-#include "user.h"
 #include "after_signin_services.h"
 #include "file.h"
+#include "user.h"
 
 #include <filesystem>
 
@@ -19,4 +19,4 @@ namespace returning_user_services {
             after_signin_services::run(get_returning_user());
         }
     }
-}
+} // namespace returning_user_services

@@ -61,7 +61,6 @@ void feature::edit() {
         return;
     }
 
-
     int const id_to_edit = input::choice(str::credential_to_edit);
 
     if (invalid_id(credentials, id_to_edit)) {

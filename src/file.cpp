@@ -10,7 +10,6 @@
 #include <fstream>
 #include <iostream>
 
-
 namespace file::user_files {
     std::string data(std::string const& username) { return username + "_data"; }
     std::string account(std::string const& username) { return username; }

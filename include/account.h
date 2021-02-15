@@ -5,7 +5,6 @@
 
 struct user;
 
-
 namespace account {
     bool exists(std::string const& username);
     bool valid_password(user const&);
