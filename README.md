@@ -17,7 +17,7 @@ A cross-platform Application for storing User-Data.
 ./bootstrap-vcpkg.sh
 ```
 2. To install the libraries for your project, run the below command in the root directory of vcpkg: 
-```
+```bash
 ./vcpkg install cryptopp
 ```
 3. Download Redux and run this command assuming vcpkg is installed in ``` home/username/Repos/vcpkg ``` and Redux is located ``` /home/username/Repos/Redux/ ```
