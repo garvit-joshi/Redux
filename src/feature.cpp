@@ -114,6 +114,7 @@ void feature::print() {
 }
 
 void feature::search() {
+    bool cred_found = false;
     if (credentials.empty()) {
         input::enter(str::add_some_credentials);
         return;
@@ -124,9 +125,12 @@ void feature::search() {
     for_each(cbegin(credentials), cend(credentials), [&, n = 1](auto const& credential) mutable {
         if (credential.company_name.find(search_term_company) != std::string::npos) {
             print_credential(credential, n);
+            cred_found = 1;
         }
         ++n;
     });
-
+    if (cred_found == 0) {
+        std::cout << str::clear_screen << "No credential found in the database.\n\n";
+    }
     input::enter();
 }
