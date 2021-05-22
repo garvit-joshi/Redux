@@ -7,6 +7,7 @@
 #include "user.h"
 
 #include <filesystem>
+#include <iostream>
 #include <string>
 #include <utility>
 
@@ -22,6 +23,10 @@ bool change_password(user const& user_) {
     }
 
     account::change_password(user_, new_password);
+
+    std::cout << str::clear_screen << "Password Changed\n\n";
+
+    input::enter();
 
     user_logout(user{user_.name, new_password});
 
