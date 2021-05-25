@@ -46,16 +46,17 @@ namespace str {
     str_type about = R"(
          ||                                                                                         ||
         =================================================================================================
-         ||                                  Redux                                                  ||
-         ||                                       Version:1.20.08(stable)                           ||
+         ||                                        Redux                                            ||
+         ||                                              Version: 1.1(stable)                       ||
          ||Dear Users,                                                                              ||
          ||          Redux is a cross platform application that will store your password in files   ||
          ||that will be protected with Encryption. Feel free to contact us on any reported bug.     ||
-         ||All the files are compiled and kept ready to use for the sake of your convenience.       ||
+         ||All the files are compiled and kept ready to use, in GitHub Actions for the sake of your ||
+         ||convenience.                                                                             ||
          ||                                                                                         ||
         =================================================================================================
-         ||  Git-Hub: https://github.com/garvit-joshi/Redux                                         ||
-         ||  Devlopers: Saurav Jha, Garvit Joshi                                                    ||
+         ||  GitHub: https://github.com/garvit-joshi/Redux                                          ||
+         ||  Developers: Saurav Jha, Garvit Joshi                                                   ||
          ||                                                                                         ||
         =================================================================================================
          ||                                                                                         ||
@@ -64,17 +65,17 @@ namespace str {
     str_type about = R"(
      ||                                                                ||
    ========================================================================
-     ||                 Redux                                          ||
-     ||                      Version:1.20.08(stable)                   ||
+     ||                           Redux                                ||
+     ||                               Version: 1.1(stable)             ||
      ||Dear Users,                                                     ||
      ||          Redux is a cross platform application that will store ||
      ||your password in files that will be protected with Encryption.  ||
      ||Feel free to contact us on any reported bug.                    ||
-     ||   Making Binary for Linux is provided in Readme.md file of     ||
-     ||this project.                                                   ||
+     ||   Making Binary for Linux and Windows is provided in Readme.md ||
+     ||file of this project.                                           ||
    ========================================================================
-     ||  Git-Hub: https://github.com/garvit-joshi/Redux                ||
-     ||  Devlopers: Saurav Jha, Garvit Joshi                           ||
+     ||  GitHub: https://github.com/garvit-joshi/Redux                 ||
+     ||  Developers: Saurav Jha, Garvit Joshi                          ||
      ||                                                                ||
    ========================================================================
      ||                                                                ||
