@@ -3,6 +3,7 @@ A cross-platform Application for storing User-Data.
 
 ![Ubuntu](https://github.com/garvit-joshi/Redux/workflows/Ubuntu/badge.svg)
 ![Windows](https://github.com/garvit-joshi/Redux/workflows/Windows/badge.svg)
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/garvit-joshi/Redux)
 
 ## Building The App from Source(Linux): 🔨
 ### Prerequisites:
