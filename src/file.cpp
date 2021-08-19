@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <unistd.h>
 
 namespace file::user_files {
     std::string filePath(std::string const& username) {
