@@ -17,7 +17,7 @@ namespace file::user_files {
             perror("getlogin() error");
             return username;
         }
-        string path = "/home/" + std::string(user) + "/.config/Redux";
+        std::string path = "/home/" + std::string(user) + "/.config/Redux";
         fs::create_directories(path);
         return path + username;
     }
