@@ -9,10 +9,28 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 namespace file::user_files {
-    std::string data(std::string const& username) { return username + "_data"; }
-    std::string account(std::string const& username) { return username; }
+
+    std::string filePath(std::string const& username) {
+#ifdef _WIN32
+        return username;
+#else
+        char* user;
+        if ((user = getlogin()) == NULL) {
+            perror("getlogin() error");
+            return username;
+        }
+        std::string path = "/home/" + std::string(user) + "/.config/Redux/";
+        std::filesystem::create_directories(path);
+        return path + username;
+#endif
+    }
+    std::string data(std::string const& username) { return filePath(username) + "_data"; }
+    std::string account(std::string const& username) { return filePath(username); }
     std::string returning_user() { return "do_not_open"; }
 } // namespace file::user_files
 

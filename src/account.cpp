@@ -6,16 +6,18 @@
 #include <fstream>
 
 namespace account {
-    bool exists(std::string const& username) { return std::filesystem::exists(username); }
+    bool exists(std::string const& username) {
+        return std::filesystem::exists(file::user_files::filePath(username));
+    }
 
     bool valid_password(user const& user) {
         try {
-            file::crypt::decrypt(user.name, user.password);
+            file::crypt::decrypt(file::user_files::filePath(user.name), user.password);
         } catch (...) {
             return false;
         }
 
-        file::crypt::encrypt(user.name, user.password);
+        file::crypt::encrypt(file::user_files::filePath(user.name), user.password);
         return true;
     }
 
