@@ -11,8 +11,30 @@
 #include <iostream>
 
 namespace file::user_files {
-    std::string data(std::string const& username) { return username + "_data"; }
-    std::string account(std::string const& username) { return username; }
+    std::string filePath(std::string const& username) {
+        char* user;
+        if ((user = getlogin()) == NULL) {
+            perror("getlogin() error");
+            return username;
+        }
+        string path = "/home/" + std::string(user) + "/.config/Redux";
+        fs::create_directories(path);
+        return path + username;
+    }
+    std::string data(std::string const& username) {
+#ifdef _WIN32
+        return username + "_data";
+#else
+        return filePath(username) + "_data";
+#endif
+    }
+    std::string account(std::string const& username) {
+#ifdef _WIN32
+        return username;
+#else
+        return filePath(username);
+#endif
+    }
     std::string returning_user() { return "do_not_open"; }
 } // namespace file::user_files
 
