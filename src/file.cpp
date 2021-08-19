@@ -19,7 +19,7 @@ namespace file::user_files {
             return username;
         }
         std::string path = "/home/" + std::string(user) + "/.config/Redux";
-        filesystem::create_directories(path);
+        std::filesystem::create_directories(path);
         return path + username;
     }
     std::string data(std::string const& username) {
