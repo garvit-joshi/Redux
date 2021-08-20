@@ -9,7 +9,10 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#ifndef _WIN32
+#ifdef _WIN32
+#include <userenv.h>
+#pragma comment(lib, "Userenv.lib")
+#else
 #include <unistd.h>
 #endif
 
@@ -17,7 +20,18 @@ namespace file::user_files {
 
     std::string filePath(std::string const& username) {
 #ifdef _WIN32
-        return username;
+        TCHAR szHomeDirBuf[MAX_PATH] = {0};
+
+        // We need a process with query permission set
+        HANDLE hToken = 0;
+        OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken);
+        DWORD BufSize = MAX_PATH;
+        GetUserProfileDirectory(hToken, szHomeDirBuf, &BufSize);
+        // Close handle opened via OpenProcessToken
+        CloseHandle(hToken);
+        std::string path = std::string(szHomeDirBuf) + "/Redux/";
+        std::filesystem::create_directories(path);
+        return path + username;
 #else
         char* user;
         if ((user = getlogin()) == NULL) {
