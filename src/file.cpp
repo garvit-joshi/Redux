@@ -14,10 +14,13 @@
 #endif
 
 namespace file::user_files {
+
+    char *getlogin() { return NULL; }
+
     std::string filePath(std::string const& username) {
 #ifdef _WIN32
         return username;
-#endif
+#else
         char* user;
         if ((user = getlogin()) == NULL) {
             perror("getlogin() error");
@@ -26,6 +29,7 @@ namespace file::user_files {
         std::string path = "/home/" + std::string(user) + "/.config/Redux/";
         std::filesystem::create_directories(path);
         return path + username;
+#endif
     }
     std::string data(std::string const& username) { return filePath(username) + "_data"; }
     std::string account(std::string const& username) { return filePath(username); }
