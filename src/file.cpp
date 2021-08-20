@@ -15,8 +15,6 @@
 
 namespace file::user_files {
 
-    char *getlogin() { return NULL; }
-
     std::string filePath(std::string const& username) {
 #ifdef _WIN32
         return username;
