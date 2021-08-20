@@ -19,6 +19,7 @@ namespace file::users {
 } // namespace file::users
 
 namespace file::user_files {
+    std::string filePath(std::string const& username);
     std::string data(std::string const& username);
     std::string account(std::string const& username);
     std::string returning_user();
