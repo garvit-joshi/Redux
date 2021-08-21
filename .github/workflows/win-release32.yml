@@ -1,0 +1,20 @@
+name: Windows
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: build
+      run: |
+        vcpkg install cryptopp:x86-windows
+        cmake -G "Visual Studio 16 2019" -A Win32 -S . -B "build32" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake --build build32 --config Release
+    - name: Upload Windows Application
+      uses: actions/upload-artifact@v2
+      with:
+        name: Windows-Applicationx86
+        path: D:\a\Redux\Redux\build32\src\Release\app.exe
