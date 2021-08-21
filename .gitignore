@@ -1,6 +1,8 @@
 *.vscode
 /.clangd
 /build
+/build64
+/build32
 /compile_commands.json
 /CMakeFiles
 build_Redux.bat
