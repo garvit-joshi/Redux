@@ -17,9 +17,9 @@ jobs:
         cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_CXX_COMPILER=g++-11
         cmake --build .
-        strip src/app
+        strip src/Redux
     - name: Upload Ubuntu Application
       uses: actions/upload-artifact@v2
       with:
         name: Linux-Application
-        path: /home/runner/work/Redux/Redux/build/src/app
+        path: /home/runner/work/Redux/Redux/build/src/Redux
