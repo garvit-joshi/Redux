@@ -33,14 +33,7 @@ namespace file::user_files {
         std::filesystem::create_directories(path);
         return path + username;
 #elif __APPLE__
-        char* user;
-        if ((user = getlogin()) == NULL) {
-            perror("getlogin() error");
-            return username;
-        }
-        std::string path = "/Users/" + std::string(user) + "/.config/Redux/";
-        std::filesystem::create_directories(path);
-        return path + username;
+        return username;
 #else
         char* user;
         if ((user = getlogin()) == NULL) {
