@@ -17,11 +17,23 @@ void user_logout(user const& user) {
 }
 
 bool change_password(user const& user_) {
+    std::cout << "\n";
     auto [valid, new_password] = signup::valid_password();
     if (!valid) {
         return false;
     }
+    std::cout << str::password_again << "\n";
+    auto [valid_again, new_password_again] = signup::valid_password();
+    if (!valid_again) {
+        return false;
+    }
 
+    if (new_password != new_password_again) {
+        std::cout << str::clear_screen;
+        std::cout << "Password do not match\n";
+        input::enter();
+        return false;
+    }
     account::change_password(user_, new_password);
 
     std::cout << str::clear_screen << "Password Changed\n\n";
