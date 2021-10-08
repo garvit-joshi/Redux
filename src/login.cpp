@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 namespace login {
     static void exceeds_attempt() {
@@ -35,8 +38,11 @@ namespace login {
 
     static auto valid_password(user const& other) {
         user user{other.name};
+#ifdef _WIN32
         user.password = input::line(str::password);
-
+#else
+        user.password = getpass(str::password);
+#endif
         int input_attempt = 0;
         while (!account::valid_password(user)) {
             if (++input_attempt == 3) {
@@ -45,7 +51,11 @@ namespace login {
             }
 
             std::cout << user.name << str::ac_pass_incorrect;
+#ifdef _WIN32
             user.password = input::line(str::password);
+#else
+            user.password = getpass(str::password);
+#endif
         }
 
         return std::make_pair(true, user.password);

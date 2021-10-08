@@ -90,6 +90,7 @@ namespace str {
 
     str_type password = "Enter your Password: ";
     str_type username = "Enter your Username: ";
+    str_type password_again = "For Security Reasons please enter your password again";
 
     str_type choice = "Enter your choice: ";
     str_type empty = "Empty.\n";
