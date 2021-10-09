@@ -47,7 +47,7 @@ namespace str {
          ||                                                                                         ||
         =================================================================================================
          ||                                        Redux                                            ||
-         ||                                              Version: 1.8(stable)                       ||
+         ||                                              Version: 1.10(stable)                      ||
          ||Dear Users,                                                                              ||
          ||          Redux is a cross platform application that will store your password in files   ||
          ||that will be protected with Encryption. Feel free to contact us on any reported bug.     ||
@@ -66,7 +66,7 @@ namespace str {
      ||                                                                ||
    ========================================================================
      ||                           Redux                                ||
-     ||                               Version: 1.8(stable)             ||
+     ||                               Version: 1.10(stable)            ||
      ||Dear Users,                                                     ||
      ||          Redux is a cross platform application that will store ||
      ||your password in files that will be protected with Encryption.  ||

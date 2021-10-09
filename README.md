@@ -57,7 +57,7 @@ cmake --build /home/username/Repos/Redux/build
     * ``` cmake -B D:/Repos/Redux/build -S . -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ```
     * ```cmake --build D:/Repos/Redux/build --config Release```
 4. Open **Redux.sln**[```Redux\build```] in Visual Studio 2019.
-5. In Solution Explorer, right click on ```app``` and click on **Set as Startup Project**.
+5. In Solution Explorer, right click on ```Redux``` and click on **Set as Startup Project**.
 6. Set Solution Configuartions as **Release**, and Build App ```[Ctrl+B]```.
 7. Binaries will be provided in ```\Redux\build\src\Release\Redux.exe```.
 
