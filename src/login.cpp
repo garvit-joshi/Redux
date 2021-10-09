@@ -11,6 +11,8 @@
 #include <utility>
 #ifndef _WIN32
 #include <unistd.h>
+#else
+#include <Windows.h>
 #endif
 
 namespace login {
@@ -39,6 +41,10 @@ namespace login {
     static auto valid_password(user const& other) {
         user user{other.name};
 #ifdef _WIN32
+        HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+        DWORD mode = 0;
+        GetConsoleMode(hStdin, &mode);
+        SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
         user.password = input::line(str::password);
 #else
         user.password = getpass(str::password);
@@ -52,6 +58,10 @@ namespace login {
 
             std::cout << user.name << str::ac_pass_incorrect;
 #ifdef _WIN32
+            HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+            DWORD mode = 0;
+            GetConsoleMode(hStdin, &mode);
+            SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
             user.password = input::line(str::password);
 #else
             user.password = getpass(str::password);
