@@ -11,6 +11,8 @@
 #include <utility>
 #ifndef _WIN32
 #include <unistd.h>
+#else
+#include <Windows.h>
 #endif
 
 namespace signup {
@@ -38,6 +40,10 @@ namespace signup {
 
     std::pair<bool, std::string> valid_password() {
 #ifdef _WIN32
+        HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+        DWORD mode = 0;
+        GetConsoleMode(hStdin, &mode);
+        SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
         std::string password = input::line(str::password);
 #else
         std::string password = getpass(str::password);
@@ -53,6 +59,10 @@ namespace signup {
 
             std::cout << str::min_pass_len << min_pass_len << "\n\n";
 #ifdef _WIN32
+            HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+            DWORD mode = 0;
+            GetConsoleMode(hStdin, &mode);
+            SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
             password = input::line(str::password);
 #else
             password = getpass(str::password);
