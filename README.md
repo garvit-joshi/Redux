@@ -48,18 +48,18 @@ cmake --build /home/username/Repos/Redux/build
 ### Steps:
 1. Download [vcpkg](https://github.com/microsoft/vcpkg) and run ```/bootstrap-vcpkg.bat```
 
-2. For installing required modules, run these commands in the root directory of vcpkg:
+2. For installing required modules, run one of these commands in the root directory of vcpkg:
 
-    * ```vcpkg install cryptopp:x64-windows```
-    * ```vcpkg install cryptopp:x86-windows```
-    * ```vcpkg integrate install```
+    * ```vcpkg install cryptopp:x64-windows``` (For 64-bit PC)
+    * ```vcpkg install cryptopp:x86-windows``` (For 32-bit PC)
+
 3. Opening cmd in root directory of Redux, and run these commands assuming your vcpkg is installed in ```C://vcpkg``` and Redux is located in ```D:\Repos\Redux```:
-    * ``` cmake -B D:/Repos/Redux/build -S . -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ```
-    * ```cmake --build D:/Repos/Redux/build --config Release```
-4. Open **Redux.sln**[```Redux\build```] in Visual Studio 2019.
-5. In Solution Explorer, right click on ```Redux``` and click on **Set as Startup Project**.
-6. Set Solution Configuartions as **Release**, and Build App ```[Ctrl+B]```.
-7. Binaries will be provided in ```\Redux\build\src\Release\Redux.exe```.
+    ```
+    cmake -G "Visual Studio 16 2019" -A Win32 -S . -B "build32" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+    cmake --build build32 --config Release
+    ```
+
+4. Binaries will be at ```D:\Repos\Redux\build32\src\Release\Redux.exe```
 
 ## Notes (if using Pre-Build Binaries for Windows):
 
