@@ -30,8 +30,6 @@ namespace file::user_files {
         // Close handle opened via OpenProcessToken
         CloseHandle(hToken);
         std::string path = std::string(szHomeDirBuf) + "/Redux/";
-        std::filesystem::create_directories(path);
-        return path + username;
 #else
         char* user;
         if ((user = getlogin()) == NULL) {
@@ -39,9 +37,9 @@ namespace file::user_files {
             return username;
         }
         std::string path = "/home/" + std::string(user) + "/.config/Redux/";
+#endif
         std::filesystem::create_directories(path);
         return path + username;
-#endif
     }
     std::string data(std::string const& username) { return filePath(username) + "_data"; }
     std::string account(std::string const& username) { return filePath(username); }
