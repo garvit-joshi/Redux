@@ -16,6 +16,7 @@ public:
     void remove();
     void search();
     void print();
+    void export_to_csv(user const& user_);
 
 private:
     void save() const;

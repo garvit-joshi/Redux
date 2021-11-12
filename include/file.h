@@ -16,6 +16,7 @@ namespace file::credentials {
 namespace file::users {
     user read(std::string const& filename);
     void write(std::string const& filename, user const&);
+    void writeToCSV(std::string filename, credential const& user_credentials, int const number);
 } // namespace file::users
 
 namespace file::user_files {
