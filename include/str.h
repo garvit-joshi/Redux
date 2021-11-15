@@ -35,11 +35,12 @@ namespace str {
             ------------------------
             1. Add Credential.
             2. Print all Credential.
-            3. Search Credential.
-            4. Edit Credential.
-            5. Delete Credential.
-            6. Change Password
-            7. Logout.
+            3. Export to CSV.
+            4. Search Credential.
+            5. Edit Credential.
+            6. Delete Credential.
+            7. Change Password
+            8. Logout.
 
 )";
 #ifdef _WIN32

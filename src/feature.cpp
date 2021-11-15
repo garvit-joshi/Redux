@@ -113,6 +113,27 @@ void feature::print() {
     input::enter();
 }
 
+void feature::export_to_csv(user const& user_) {
+    if (credentials.empty()) {
+        input::enter(str::add_some_credentials);
+        return;
+    }
+
+    std::string file_name = file::user_files::filePath(user_.name) + ".csv";
+
+    for_each(cbegin(credentials), cend(credentials),
+             [n = 1, file_name](auto const& credential) mutable {
+                 // ToDO: add a check for the file existence
+                 // ToDO: Make unique file name(with username)
+                 file::users::writeToCSV(file_name, credential, n);
+                 ++n;
+             });
+
+    std::cout << "\nData Saved to "<<file_name<<"\n\n\n";
+
+    input::enter();
+}
+
 void feature::search() {
     bool cred_found = false;
     if (credentials.empty()) {

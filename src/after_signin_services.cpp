@@ -14,6 +14,7 @@ namespace after_signin_services {
     enum menu {
         add = 1,
         print,
+        export_to_csv,
         search,
         edit,
         remove,
@@ -40,6 +41,10 @@ namespace after_signin_services {
 
             case menu::print:
                 feature.print();
+                break;
+
+            case menu::export_to_csv:
+                feature.export_to_csv(user);
                 break;
 
             case menu::search:
