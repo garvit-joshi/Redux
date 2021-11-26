@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.1...3.21)
+cmake_minimum_required(VERSION 3.1...3.22)
 
 project(
   Redux
-  VERSION 1.10
+  VERSION 1.11
   DESCRIPTION "A credential storage with encryption."
   LANGUAGES CXX
 )

@@ -48,7 +48,7 @@ namespace str {
          ||                                                                                         ||
         =================================================================================================
          ||                                        Redux                                            ||
-         ||                                              Version: 1.10(stable)                      ||
+         ||                                              Version: 1.11(stable)                      ||
          ||Dear Users,                                                                              ||
          ||          Redux is a cross platform application that will store your password in files   ||
          ||that will be protected with Encryption. Feel free to contact us on any reported bug.     ||
@@ -57,7 +57,8 @@ namespace str {
          ||                                                                                         ||
         =================================================================================================
          ||  GitHub: https://github.com/garvit-joshi/Redux                                          ||
-         ||  Developers: Saurav Jha, Garvit Joshi                                                   ||
+         ||  Developers: Garvit Joshi <garvitjoshi9@gmail.com>                                      ||
+         ||              Saurav Jha                                                                 ||
          ||                                                                                         ||
         =================================================================================================
          ||                                                                                         ||
@@ -67,7 +68,7 @@ namespace str {
      ||                                                                ||
    ========================================================================
      ||                           Redux                                ||
-     ||                               Version: 1.10(stable)            ||
+     ||                               Version: 1.11(stable)            ||
      ||Dear Users,                                                     ||
      ||          Redux is a cross platform application that will store ||
      ||your password in files that will be protected with Encryption.  ||
@@ -76,7 +77,8 @@ namespace str {
      ||file of this project.                                           ||
    ========================================================================
      ||  GitHub: https://github.com/garvit-joshi/Redux                 ||
-     ||  Developers: Saurav Jha, Garvit Joshi                          ||
+     ||  Developers: Garvit Joshi <garvitjoshi9@gmail.com>             ||
+     ||              Saurav Jha                                        ||
      ||                                                                ||
    ========================================================================
      ||                                                                ||
