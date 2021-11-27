@@ -4,14 +4,14 @@ on: [push]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v2
     - name: build
       run: |
         vcpkg install cryptopp:x64-windows
-        cmake -G "Visual Studio 16 2019" -A x64 -S . -B "build64" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake -G "Visual Studio 17 2022" -A x64 -S . -B "build64" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
         cmake --build build64 --config Release
     - name: Upload Windows Application
       uses: actions/upload-artifact@v2
