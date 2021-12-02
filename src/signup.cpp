@@ -5,6 +5,7 @@
 #include "input.h"
 #include "str.h"
 #include "user.h"
+#include "utils.h"
 
 #include <iostream>
 #include <string>
@@ -40,11 +41,9 @@ namespace signup {
 
     std::pair<bool, std::string> valid_password() {
 #ifdef _WIN32
-        HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-        DWORD mode = 0;
-        GetConsoleMode(hStdin, &mode);
-        SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+        utils::switchStdinEcho("ECHO_ON");
         std::string password = input::line(str::password);
+        utils::switchStdinEcho("ECHO_OFF");
 #else
         std::string password = getpass(str::password);
 #endif
@@ -59,11 +58,9 @@ namespace signup {
 
             std::cout << str::min_pass_len << min_pass_len << "\n\n";
 #ifdef _WIN32
-            HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-            DWORD mode = 0;
-            GetConsoleMode(hStdin, &mode);
-            SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+            utils::switchStdinEcho("ECHO_ON");
             password = input::line(str::password);
+            utils::switchStdinEcho("ECHO_OFF");
 #else
             password = getpass(str::password);
 #endif

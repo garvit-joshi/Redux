@@ -59,7 +59,7 @@ namespace file::users {
     void write(std::string const& filename, user const& user) { std::ofstream{filename} << user; }
 
     void writeToCSV(std::string filename, credential const& user_credentials, int const number) {
-        if(number == 1) {
+        if (number == 1) {
             std::ofstream{filename, std::ios::out} << "ID,Company Name,Username,Password\n";
         }
         std::ofstream{filename, std::ios::app} << number << "," << user_credentials.company_name

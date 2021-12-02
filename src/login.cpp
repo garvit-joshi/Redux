@@ -5,6 +5,7 @@
 #include "input.h"
 #include "str.h"
 #include "user.h"
+#include "utils.h"
 
 #include <iostream>
 #include <string>
@@ -41,11 +42,9 @@ namespace login {
     static auto valid_password(user const& other) {
         user user{other.name};
 #ifdef _WIN32
-        HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-        DWORD mode = 0;
-        GetConsoleMode(hStdin, &mode);
-        SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+        utils::switchStdinEcho("ECHO_ON");
         user.password = input::line(str::password);
+        utils::switchStdinEcho("ECHO_OFF");
 #else
         user.password = getpass(str::password);
 #endif
@@ -58,11 +57,9 @@ namespace login {
 
             std::cout << user.name << str::ac_pass_incorrect;
 #ifdef _WIN32
-            HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-            DWORD mode = 0;
-            GetConsoleMode(hStdin, &mode);
-            SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+            utils::switchStdinEcho("ECHO_ON");
             user.password = input::line(str::password);
+            utils::switchStdinEcho("ECHO_OFF");
 #else
             user.password = getpass(str::password);
 #endif
