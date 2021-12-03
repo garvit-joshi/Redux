@@ -2,7 +2,9 @@
 #define UTILS_H
 
 #include <string>
-#ifdef _WIN32
+#ifndef _WIN32
+#include <unistd.h>
+#else
 #include <Windows.h>
 #endif
 

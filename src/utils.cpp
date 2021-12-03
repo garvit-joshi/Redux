@@ -2,12 +2,15 @@
 
 #include <iostream>
 #include <string>
-#ifdef _WIN32
+#ifndef _WIN32
+#include <unistd.h>
+#else
 #include <Windows.h>
 #endif
 
 namespace utils {
     void switchStdinEcho(std::string const& console_mode) {
+#ifdef _WIN32
         HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
         DWORD mode = 0;
         GetConsoleMode(hStdin, &mode);
@@ -17,5 +20,6 @@ namespace utils {
             mode |= ENABLE_ECHO_INPUT;
         }
         SetConsoleMode(hStdin, mode);
+#endif
     }
 } // namespace utils
