@@ -29,7 +29,7 @@ namespace file::user_files {
         GetUserProfileDirectory(hToken, szHomeDirBuf, &BufSize);
         // Close handle opened via OpenProcessToken
         CloseHandle(hToken);
-        std::string path = std::string(szHomeDirBuf) + "/Redux/";
+        std::string path = std::string(szHomeDirBuf) + "\\Redux\\";
 #else
         char* user;
         if ((user = getlogin()) == NULL) {
