@@ -6,14 +6,13 @@
 #include <cryptopp/files.h>
 #include <cryptopp/filters.h>
 
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #ifdef _WIN32
 #include <userenv.h>
 #pragma comment(lib, "Userenv.lib")
-#else
-#include <unistd.h>
 #endif
 
 namespace file::user_files {
@@ -29,17 +28,17 @@ namespace file::user_files {
         GetUserProfileDirectory(hToken, szHomeDirBuf, &BufSize);
         // Close handle opened via OpenProcessToken
         CloseHandle(hToken);
-        std::string path = std::string(szHomeDirBuf) + "\\Redux\\";
+        std::filesystem::path path = std::filesystem::path{szHomeDirBuf} / "Redux";
 #else
-        char* user;
-        if ((user = getlogin()) == NULL) {
-            perror("getlogin() error");
+        char const* home = std::getenv("HOME");
+        if (home == nullptr || std::string{home}.empty()) {
+            std::cerr << "HOME environment variable is not set\n";
             return username;
         }
-        std::string path = "/home/" + std::string(user) + "/.config/Redux/";
+        std::filesystem::path path = std::filesystem::path{home} / ".config" / "Redux";
 #endif
         std::filesystem::create_directories(path);
-        return path + username;
+        return (path / username).string();
     }
     std::string data(std::string const& username) { return filePath(username) + "_data"; }
     std::string account(std::string const& username) { return filePath(username); }

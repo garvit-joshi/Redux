@@ -4,10 +4,10 @@ on: [push]
 
 jobs:
   build:
-    runs-on: macos-11
+    runs-on: macos-13
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: build
       run: |
         vcpkg install cryptopp:x64-osx
@@ -17,7 +17,7 @@ jobs:
         cmake --build .
         strip src/Redux
     - name: Upload macOS Application
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: macOS Application
         path: /Users/runner/work/Redux/Redux/build/src/Redux

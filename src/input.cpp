@@ -1,21 +1,20 @@
 #include "input.h"
 #include "str.h"
 
-#include <algorithm>
 #include <iostream>
-#include <iterator>
 #include <limits>
 
 namespace input {
 
     static std::string trim(std::string const& str) {
-        std::string result;
-
         std::string spaces{"\t\v\f "};
-        std::copy(str.begin() + str.find_first_not_of(spaces),
-                  str.begin() + str.find_last_not_of(spaces) + 1, std::back_inserter(result));
+        auto const first = str.find_first_not_of(spaces);
+        if (first == std::string::npos) {
+            return {};
+        }
 
-        return result;
+        auto const last = str.find_last_not_of(spaces);
+        return str.substr(first, last - first + 1);
     }
 
     static bool valid(std::string const& str) { return !str.empty() && !trim(str).empty(); }
