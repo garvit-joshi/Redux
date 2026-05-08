@@ -27,4 +27,7 @@ rg -q 'actions/checkout@v2|actions/upload-artifact@v2|github/codeql-action/(init
 rg -q 'runs-on: (ubuntu-20\.04|macos-11)' .github/workflows \
   && fail "GitHub workflows still use old runner images"
 
+rg -q 'cryptopp::cryptopp' src/CMakeLists.txt \
+  || fail "CMake should link the vcpkg-provided cryptopp::cryptopp target"
+
 printf 'P0 regression checks passed.\n'
