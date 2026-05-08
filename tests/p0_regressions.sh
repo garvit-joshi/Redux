@@ -24,7 +24,7 @@ rg -q 'branches: \[ master \]' .github/workflows/codeql-analysis.yml \
 rg -q 'actions/checkout@v2|actions/upload-artifact@v2|github/codeql-action/(init|analyze)@v1' .github/workflows \
   && fail "GitHub workflows still use deprecated v1/v2 actions"
 
-rg -q 'runs-on: (ubuntu-20\.04|macos-11)' .github/workflows \
+rg -q 'runs-on: (ubuntu-20\.04|macos-11|macos-13)' .github/workflows \
   && fail "GitHub workflows still use old runner images"
 
 rg -q 'cryptopp::cryptopp' src/CMakeLists.txt \
