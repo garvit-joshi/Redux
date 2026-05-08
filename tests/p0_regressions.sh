@@ -27,6 +27,12 @@ rg -q 'actions/checkout@v2|actions/upload-artifact@v2|github/codeql-action/(init
 rg -q 'runs-on: (ubuntu-20\.04|macos-11|macos-13)' .github/workflows \
   && fail "GitHub workflows still use old runner images"
 
+rg -q 'runs-on: macos-26$' .github/workflows/macOS-release.yml \
+  || fail "macOS workflow should run on macos-26"
+
+rg -q 'cryptopp:arm64-osx' .github/workflows/macOS-release.yml \
+  || fail "macOS workflow should install Crypto++ for arm64-osx"
+
 rg -q 'cryptopp::cryptopp' src/CMakeLists.txt \
   || fail "CMake should link the vcpkg-provided cryptopp::cryptopp target"
 

@@ -4,13 +4,13 @@ on: [push]
 
 jobs:
   build:
-    runs-on: macos-15-intel
+    runs-on: macos-26
 
     steps:
     - uses: actions/checkout@v4
     - name: build
       run: |
-        vcpkg install cryptopp:x64-osx
+        vcpkg install cryptopp:arm64-osx
         mkdir build
         cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
