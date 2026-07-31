@@ -26,13 +26,18 @@ namespace signup {
         std::string username = input::line(str::username);
 
         int input_attempt = 0;
-        while (account::exists(username)) {
+        while (!account::valid_username(username) || account::exists(username)) {
             if (++input_attempt == 3) {
                 exceeds_attempt();
                 return std::make_pair(false, std::string{});
             }
 
-            std::cout << username << str::ac_already_exists;
+            if (!account::valid_username(username)) {
+                std::cout << str::invalid_username;
+            } else {
+                std::cout << username << str::ac_already_exists;
+            }
+
             username = input::line(str::username);
         }
 

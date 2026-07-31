@@ -36,8 +36,10 @@ namespace login {
             username = input::line_or(msg.c_str(), remembered);
         }
 
+        // Checking validity first means a rejected name never reaches the filesystem, so a
+        // crafted username cannot be used to probe for files outside the config directory.
         int input_attempt = 0;
-        while (!account::exists(username)) {
+        while (!account::valid_username(username) || !account::exists(username)) {
             if (++input_attempt == 3) {
                 exceeds_attempt();
                 return std::make_pair(false, std::string{});

@@ -108,6 +108,9 @@ namespace str {
     str_type ac_not_exists = "'s account doesn't exists.\n\n";
     str_type ac_pass_incorrect = "'s password is not correct.\n\n";
     str_type ac_already_exists = "'s account is already exists.\n\n";
+    str_type invalid_username =
+        "A username must start with a letter or digit and may contain only letters, digits, "
+        "'.', '-' and '_', up to 64 characters.\n\n";
     str_type min_pass_len = "Minimum password length is ";
 
     str_type credential_to_remove = "Enter the credential id to remove: ";
