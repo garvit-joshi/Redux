@@ -1,23 +1,24 @@
 #include "file.h"
 #include "credential.h"
-#include "user.h"
 
 #include <cryptopp/default.h>
-#include <cryptopp/files.h>
 #include <cryptopp/filters.h>
 
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <iterator>
+#include <sstream>
 #ifdef _WIN32
 #include <userenv.h>
 #pragma comment(lib, "Userenv.lib")
 #endif
 
-namespace file::user_files {
-
-    std::string filePath(std::string const& username) {
+namespace {
+    // Directory holding every file Redux owns. Empty when it cannot be determined, which makes
+    // the callers below fall back to bare relative names in the working directory.
+    std::filesystem::path config_dir() {
 #ifdef _WIN32
         TCHAR szHomeDirBuf[MAX_PATH] = {0};
 
@@ -33,29 +34,62 @@ namespace file::user_files {
         char const* home = std::getenv("HOME");
         if (home == nullptr || std::string{home}.empty()) {
             std::cerr << "HOME environment variable is not set\n";
-            return username;
+            return {};
         }
         std::filesystem::path path = std::filesystem::path{home} / ".config" / "Redux";
 #endif
         std::filesystem::create_directories(path);
-        return (path / username).string();
+        return path;
+    }
+} // namespace
+
+namespace file::user_files {
+
+    std::string filePath(std::string const& username) {
+        return (config_dir() / username).string();
     }
     std::string data(std::string const& username) { return filePath(username) + "_data"; }
     std::string account(std::string const& username) { return filePath(username); }
-    std::string returning_user() { return "do_not_open"; }
 } // namespace file::user_files
 
-namespace file::users {
+namespace file::last_user {
 
-    user read(std::string const& filename) {
-        user result;
+    void save(std::string const& username) {
+        try {
+            auto const dir = config_dir();
+            if (dir.empty()) {
+                return;
+            }
+            std::filesystem::permissions(dir, std::filesystem::perms::owner_all);
 
-        std::ifstream{filename} >> result;
-
-        return result;
+            auto const path = dir / ".last_user";
+            std::ofstream{path} << username;
+            std::filesystem::permissions(path, std::filesystem::perms::owner_read |
+                                                   std::filesystem::perms::owner_write);
+        } catch (...) {
+            // Remembering the username is a convenience. Never let it break signing in.
+        }
     }
 
-    void write(std::string const& filename, user const& user) { std::ofstream{filename} << user; }
+    std::string load() {
+        try {
+            auto const path = config_dir() / ".last_user";
+            if (!std::filesystem::exists(path)) {
+                return {};
+            }
+
+            std::ifstream in{path};
+            std::string username;
+            std::getline(in, username);
+
+            return username;
+        } catch (...) {
+            return {};
+        }
+    }
+} // namespace file::last_user
+
+namespace file::users {
 
     void writeToCSV(std::string filename, credential const& user_credentials, int const number) {
         if (number == 1) {
@@ -68,21 +102,28 @@ namespace file::users {
 } // namespace file::users
 
 namespace file::credentials {
-    void write(std::string const& filename, std::vector<credential> const& credentials) {
-        std::ofstream file{filename};
+    void write(std::string const& filename, std::vector<credential> const& credentials,
+               std::string const& password) {
+        std::ostringstream plaintext;
 
         for (auto const& cre : credentials) {
-            file << cre;
+            plaintext << cre;
         }
+
+        file::crypt::write_encrypted(filename, plaintext.str(), password);
     }
 
-    std::vector<credential> read(std::string const& filename) {
+    std::vector<credential> read(std::string const& filename, std::string const& password) {
         std::vector<credential> result;
 
-        std::ifstream file{filename};
+        if (!std::filesystem::exists(filename)) {
+            return result;
+        }
+
+        std::istringstream plaintext{file::crypt::read_decrypted(filename, password)};
 
         credential credential;
-        while (file >> credential) {
+        while (plaintext >> credential) {
             result.push_back(credential);
         }
 
@@ -92,33 +133,33 @@ namespace file::credentials {
 
 namespace file::crypt {
 
-    void encrypt(std::string const& filename, std::string const& password) {
+    void write_encrypted(std::string const& filename, std::string const& plaintext,
+                         std::string const& password) {
         using namespace CryptoPP;
 
-        if (std::filesystem::is_empty(filename)) {
-            return;
-        }
+        std::string ciphertext;
+        StringSource{plaintext, true,
+                     new DefaultEncryptorWithMAC{reinterpret_cast<byte const*>(password.data()),
+                                                 password.size(), new StringSink{ciphertext}}};
 
-        std::string encrypted_content;
-        FileSource{filename.c_str(), true,
-                   new DefaultEncryptorWithMAC{(byte*)password.data(), password.size(),
-                                               new StringSink{encrypted_content}}};
-
-        std::ofstream{filename, std::ios::trunc} << encrypted_content;
+        // Binary: the payload is ciphertext, and a text-mode stream would translate LF to CRLF
+        // inside it on Windows and corrupt it.
+        std::ofstream out{filename, std::ios::binary | std::ios::trunc};
+        out.write(ciphertext.data(), static_cast<std::streamsize>(ciphertext.size()));
     }
 
-    void decrypt(std::string const& filename, std::string const& password) {
+    std::string read_decrypted(std::string const& filename, std::string const& password) {
         using namespace CryptoPP;
 
-        if (std::filesystem::is_empty(filename)) {
-            return;
-        }
+        std::ifstream in{filename, std::ios::binary};
+        std::string const ciphertext{std::istreambuf_iterator<char>{in},
+                                     std::istreambuf_iterator<char>{}};
 
-        std::string decrypted_content;
-        FileSource{filename.c_str(), true,
-                   new DefaultDecryptorWithMAC{(byte*)password.data(), password.size(),
-                                               new StringSink{decrypted_content}}};
+        std::string plaintext;
+        StringSource{ciphertext, true,
+                     new DefaultDecryptorWithMAC{reinterpret_cast<byte const*>(password.data()),
+                                                 password.size(), new StringSink{plaintext}}};
 
-        std::ofstream{filename, std::ios::trunc} << decrypted_content;
+        return plaintext;
     }
 } // namespace file::crypt

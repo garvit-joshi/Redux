@@ -23,7 +23,18 @@ namespace login {
     }
 
     static auto valid_username() {
-        std::string username = input::line(str::username);
+        // Offer the last signed-in username as a default. Only the name is remembered; the
+        // password is always required below.
+        std::string const remembered = file::last_user::load();
+
+        std::string username;
+        if (remembered.empty()) {
+            username = input::line(str::username);
+        } else {
+            std::string const msg =
+                std::string{str::username_prefix} + remembered + str::username_suffix;
+            username = input::line_or(msg.c_str(), remembered);
+        }
 
         int input_attempt = 0;
         while (!account::exists(username)) {
@@ -80,9 +91,7 @@ namespace login {
         if (auto [valid, password] = valid_password(user); valid) {
             user.password = password;
 
-            file::crypt::decrypt(file::user_files::data(user.name), user.password);
-
-            file::users::write(file::user_files::returning_user(), user);
+            file::last_user::save(user.name);
 
             after_signin_services::run(user);
         }

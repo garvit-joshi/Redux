@@ -1,20 +1,13 @@
 #include "logout.h"
 #include "account.h"
-#include "file.h"
 #include "input.h"
 #include "signup.h"
 #include "str.h"
 #include "user.h"
 
-#include <filesystem>
 #include <iostream>
 #include <string>
 #include <utility>
-
-void user_logout(user const& user) {
-    std::filesystem::remove(file::user_files::returning_user());
-    file::crypt::encrypt(file::user_files::data(user.name), user.password);
-}
 
 bool change_password(user const& user_) {
     std::cout << "\n";
@@ -40,7 +33,7 @@ bool change_password(user const& user_) {
 
     input::enter();
 
-    user_logout(user{user_.name, new_password});
-
+    // Returning true sends the caller back to the startup menu, which is the re-authentication
+    // we want. There is no logout-time file work left: the vault is always encrypted at rest.
     return true;
 }

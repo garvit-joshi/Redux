@@ -15,12 +15,12 @@ enum confirm {
 };
 
 void feature::save() const {
-    file::credentials::write(file::user_files::data(username), credentials);
+    file::credentials::write(file::user_files::data(username), credentials, password);
 }
 
-feature::feature(std::string username_)
-    : username{std::move(username_)}, credentials{file::credentials::read(
-                                          file::user_files::data(username))} {}
+feature::feature(std::string username_, std::string password_)
+    : username{std::move(username_)}, password{std::move(password_)},
+      credentials{file::credentials::read(file::user_files::data(username), password)} {}
 
 static void print_credential(credential const& credential, int const number) {
     std::cout << "\n=========== " << number << " ===========\n"
