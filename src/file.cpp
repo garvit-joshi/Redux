@@ -10,6 +10,8 @@
 #include <iostream>
 #include <iterator>
 #include <sstream>
+#include <stdexcept>
+#include <system_error>
 #ifdef _WIN32
 #include <userenv.h>
 #pragma comment(lib, "Userenv.lib")
@@ -48,7 +50,10 @@ namespace file::user_files {
     std::string filePath(std::string const& username) {
         return (config_dir() / username).string();
     }
-    std::string data(std::string const& username) { return filePath(username) + "_data"; }
+    // '@' cannot appear in a valid username, which is what keeps this suffix from colliding with
+    // another account: with the old "_data" suffix, registering "alice_data" silently took over
+    // the vault belonging to "alice".
+    std::string data(std::string const& username) { return filePath(username) + "@vault"; }
     std::string account(std::string const& username) { return filePath(username); }
 } // namespace file::user_files
 
@@ -142,10 +147,40 @@ namespace file::crypt {
                      new DefaultEncryptorWithMAC{reinterpret_cast<byte const*>(password.data()),
                                                  password.size(), new StringSink{ciphertext}}};
 
-        // Binary: the payload is ciphertext, and a text-mode stream would translate LF to CRLF
-        // inside it on Windows and corrupt it.
-        std::ofstream out{filename, std::ios::binary | std::ios::trunc};
-        out.write(ciphertext.data(), static_cast<std::streamsize>(ciphertext.size()));
+        // Write to a sibling temp file and rename it over the target. Opening the target with
+        // trunc would destroy the old contents before the new bytes were known to be on disk, so
+        // a failing write would leave a 0-byte vault -- unreadable, and unrecoverable.
+        // The staging name is dot-prefixed so it cannot collide with a real user's file: a valid
+        // username must begin with an alphanumeric, so no account file is ever named ".<x>.new".
+        // Naming it "<filename>.new" would mean saving user "alice" clobbers user "alice.new".
+        std::filesystem::path const target{filename};
+        std::filesystem::path const staging =
+            target.parent_path() / ('.' + target.filename().string() + ".new");
+
+        {
+            // Binary: the payload is ciphertext, and a text-mode stream would translate LF to
+            // CRLF inside it on Windows and corrupt it.
+            std::ofstream out{staging, std::ios::binary | std::ios::trunc};
+            out.write(ciphertext.data(), static_cast<std::streamsize>(ciphertext.size()));
+
+            // Close here rather than letting the destructor do it. Some filesystems only report a
+            // deferred write error when the file is closed, and a destructor has no way to report
+            // it -- the staging file would then be renamed over a good vault while holding
+            // incomplete ciphertext. Checking after the close is what makes the rename safe.
+            out.close();
+
+            if (!out) {
+                std::error_code ec;
+                std::filesystem::remove(staging, ec);
+                throw std::runtime_error{"could not write " + target.string()};
+            }
+        }
+
+        // Owner-only before it is published, so the file is never briefly world-readable.
+        std::filesystem::permissions(staging, std::filesystem::perms::owner_read |
+                                                  std::filesystem::perms::owner_write);
+
+        std::filesystem::rename(staging, target);
     }
 
     std::string read_decrypted(std::string const& filename, std::string const& password) {

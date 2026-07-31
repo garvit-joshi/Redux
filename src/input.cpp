@@ -23,11 +23,15 @@ namespace input {
         std::cout << msg;
 
         std::string str;
-        while (getline(std::cin, str) && !valid(str)) {
+        while (getline(std::cin, str)) {
+            if (valid(str)) {
+                return trim(str);
+            }
+
             std::cout << str::try_again << msg;
         }
 
-        return trim(str);
+        throw end_of_input{};
     }
 
     std::string line_or(char const* const msg, std::string const& fallback) {
@@ -35,7 +39,7 @@ namespace input {
 
         std::string str;
         if (!getline(std::cin, str)) {
-            return fallback;
+            throw end_of_input{};
         }
 
         auto trimmed = trim(str);
@@ -49,6 +53,12 @@ namespace input {
         int result = 0;
 
         while (!(std::cin >> result)) {
+            // Without this, clear() followed by ignore() re-sets eofbit immediately and the loop
+            // spins forever printing the retry message.
+            if (std::cin.eof()) {
+                throw end_of_input{};
+            }
+
             std::cout << str::try_again << msg;
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
