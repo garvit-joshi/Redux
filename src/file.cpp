@@ -162,7 +162,12 @@ namespace file::crypt {
             // CRLF inside it on Windows and corrupt it.
             std::ofstream out{staging, std::ios::binary | std::ios::trunc};
             out.write(ciphertext.data(), static_cast<std::streamsize>(ciphertext.size()));
-            out.flush();
+
+            // Close here rather than letting the destructor do it. Some filesystems only report a
+            // deferred write error when the file is closed, and a destructor has no way to report
+            // it -- the staging file would then be renamed over a good vault while holding
+            // incomplete ciphertext. Checking after the close is what makes the rename safe.
+            out.close();
 
             if (!out) {
                 std::error_code ec;
