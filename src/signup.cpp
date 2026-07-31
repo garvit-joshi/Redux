@@ -83,7 +83,7 @@ namespace signup {
 
             account::create(user);
 
-            file::users::write(file::user_files::returning_user(), user);
+            file::last_user::save(user.name);
 
             after_signin_services::run(user);
         }

@@ -30,6 +30,19 @@ namespace input {
         return trim(str);
     }
 
+    std::string line_or(char const* const msg, std::string const& fallback) {
+        std::cout << msg;
+
+        std::string str;
+        if (!getline(std::cin, str)) {
+            return fallback;
+        }
+
+        auto trimmed = trim(str);
+
+        return trimmed.empty() ? fallback : trimmed;
+    }
+
     int choice(char const* const msg) {
         std::cout << msg;
 

@@ -1,24 +1,13 @@
 #ifndef USER_H
 #define USER_H
 
-#include <istream>
-#include <ostream>
 #include <string>
 
+// Deliberately not streamable. `user` holds a plaintext password, so giving it operator<< /
+// operator>> is what previously let the master password be written to disk in the clear.
 struct user {
     std::string name;
     std::string password;
 };
-
-inline std::ostream& operator<<(std::ostream& os, user const& user) {
-    return os << user.name << '\n' << user.password << '\n';
-}
-
-inline std::istream& operator>>(std::istream& is, user& user) {
-    getline(is, user.name);
-    getline(is, user.password);
-
-    return is;
-}
 
 #endif // USER_H

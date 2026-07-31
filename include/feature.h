@@ -9,7 +9,7 @@ struct user;
 
 class feature {
 public:
-    explicit feature(std::string username);
+    feature(std::string username, std::string password);
 
     void add();
     void edit();
@@ -22,6 +22,7 @@ private:
     void save() const;
 
     std::string username;
+    std::string password;
     std::vector<credential> credentials;
 };
 

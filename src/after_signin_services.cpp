@@ -23,7 +23,7 @@ namespace after_signin_services {
     };
 
     void run(user const& user) {
-        feature feature{user.name};
+        feature feature{user.name, user.password};
 
         unsigned choice = menu::add; // making sure choice is not 'logout'.
         while (choice != menu::logout) {
@@ -66,7 +66,6 @@ namespace after_signin_services {
                 break;
 
             case logout:
-                user_logout(user);
                 return;
 
             default:

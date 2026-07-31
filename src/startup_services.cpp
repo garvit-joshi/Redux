@@ -1,7 +1,6 @@
 #include "startup_services.h"
 #include "input.h"
 #include "login.h"
-#include "returning_user_services.h"
 #include "signup.h"
 #include "str.h"
 
@@ -16,8 +15,6 @@ namespace startup_services {
     };
 
     void run() {
-        returning_user_services::run();
-
         unsigned choice = menu::login; // making sure choice is not 'exit'.
 
         while (choice != menu::exit) {
