@@ -2,14 +2,12 @@
 #define UTILS_H
 
 #include <string>
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <Windows.h>
-#endif
 
 namespace utils {
-    void switchStdinEcho(std::string const& console_mode);
-}
+    // Reads a line of input without echoing it, restoring the terminal on every exit path --
+    // exceptions included. Throwing out of a password prompt used to skip the re-enabling call
+    // and leave the invoking Windows shell with echo switched off.
+    std::string read_password(char const* prompt);
+} // namespace utils
 
-#endif // UTILITY FUNCTIONS
+#endif // UTILS_H

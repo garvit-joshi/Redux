@@ -10,11 +10,6 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <Windows.h>
-#endif
 
 namespace signup {
     static void exceeds_attempt() {
@@ -45,13 +40,7 @@ namespace signup {
     }
 
     std::pair<bool, std::string> valid_password() {
-#ifdef _WIN32
-        utils::switchStdinEcho("ECHO_ON");
-        std::string password = input::line(str::password);
-        utils::switchStdinEcho("ECHO_OFF");
-#else
-        std::string password = getpass(str::password);
-#endif
+        std::string password = utils::read_password(str::password);
 
         int input_attempt = 0;
         constexpr auto min_pass_len = 8;
@@ -62,13 +51,7 @@ namespace signup {
             }
 
             std::cout << str::min_pass_len << min_pass_len << "\n\n";
-#ifdef _WIN32
-            utils::switchStdinEcho("ECHO_ON");
-            password = input::line(str::password);
-            utils::switchStdinEcho("ECHO_OFF");
-#else
-            password = getpass(str::password);
-#endif
+            password = utils::read_password(str::password);
         }
 
         return {true, password};

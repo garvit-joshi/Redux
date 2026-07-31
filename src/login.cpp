@@ -10,11 +10,6 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <Windows.h>
-#endif
 
 namespace login {
     static void exceeds_attempt() {
@@ -53,14 +48,8 @@ namespace login {
     }
 
     static auto valid_password(user const& other) {
-        user user{other.name};
-#ifdef _WIN32
-        utils::switchStdinEcho("ECHO_ON");
-        user.password = input::line(str::password);
-        utils::switchStdinEcho("ECHO_OFF");
-#else
-        user.password = getpass(str::password);
-#endif
+        user user{other.name, utils::read_password(str::password)};
+
         int input_attempt = 0;
         while (!account::valid_password(user)) {
             if (++input_attempt == 3) {
@@ -69,13 +58,7 @@ namespace login {
             }
 
             std::cout << user.name << str::ac_pass_incorrect;
-#ifdef _WIN32
-            utils::switchStdinEcho("ECHO_ON");
-            user.password = input::line(str::password);
-            utils::switchStdinEcho("ECHO_OFF");
-#else
-            user.password = getpass(str::password);
-#endif
+            user.password = utils::read_password(str::password);
         }
 
         return std::make_pair(true, user.password);
