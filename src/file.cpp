@@ -88,6 +88,12 @@ namespace {
     // comfortably above anything write() produces (32 MiB today) while staying survivable.
     constexpr std::uint64_t max_scrypt_memory = 256ull * 1024 * 1024;
 
+    // Memory is not the only pre-authentication cost: running time scales with N * r * p, and a
+    // header can stay under the memory ceiling while declaring work far beyond it (log2(N)=21,
+    // r=1, p=16 fits in 256 MiB but stalls login for tens of seconds). Sixteen times today's
+    // write-side work (2^15 * 8 * 1) is the generous end of sane.
+    constexpr std::uint64_t max_scrypt_work = 1ull << 22;
+
     constexpr char magic[magic_size] = {'R', 'E', 'D', 'U', 'X', 'V', 'L', 'T'};
 
     // --- owner-only permissions -------------------------------------------------------------
@@ -455,6 +461,10 @@ namespace file::vault {
             throw std::runtime_error{
                 "unsupported Redux vault format: unreasonable scrypt memory cost"};
         }
+        if ((std::uint64_t{1} << log2n) * r * p_param > max_scrypt_work) {
+            throw std::runtime_error{
+                "unsupported Redux vault format: unreasonable scrypt work cost"};
+        }
         if (salt_len != salt_size || nonce_len != nonce_size) {
             throw std::runtime_error{
                 "unsupported Redux vault format: unexpected salt or nonce length"};
@@ -561,7 +571,11 @@ namespace file::users {
 } // namespace file::users
 
 namespace file::user_files {
-    std::string filePath(std::string const& username) { return (config_dir() / username).string(); }
+    // The '@' cannot appear in a valid username, which is what makes this path provably
+    // distinct from every vault file -- see the header comment.
+    std::string export_path(std::string const& username) {
+        return (config_dir() / (username + "@export.csv")).string();
+    }
 } // namespace file::user_files
 
 namespace file::last_user {

@@ -39,9 +39,12 @@ namespace file::users {
 } // namespace file::users
 
 namespace file::user_files {
-    // Base path for files Redux derives from a username but that are not the vault itself --
-    // currently only the CSV export.
-    std::string filePath(std::string const& username);
+    // Where "Export to CSV" writes. The '@' is what keeps this outside the vault namespace:
+    // vault files live at config_dir()/<username> with no suffix, usernames may contain dots,
+    // and '@' cannot appear in a valid username -- so no account can ever share a path with an
+    // export. A plain "<username>.csv" name would be the vault file of an account literally
+    // named "alice.csv", and exporting from "alice" would overwrite that vault with plaintext.
+    std::string export_path(std::string const& username);
 } // namespace file::user_files
 
 // Remembers who logged in last so the login prompt can offer it as a default. Stores the

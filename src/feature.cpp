@@ -120,7 +120,7 @@ void feature::export_to_csv(user const& user_) {
         return;
     }
 
-    std::string const file_name = file::user_files::filePath(user_.name) + ".csv";
+    std::string const file_name = file::user_files::export_path(user_.name);
 
     file::users::writeToCSV(file_name, credentials);
 

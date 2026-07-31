@@ -477,6 +477,29 @@ namespace {
             }
             check(rejected, "log2(N) = 24 with r = 32 (64 GiB combined) is rejected");
         }
+
+        // log2(N) = 21, r = 1, p = 16 fits under the 256 MiB memory ceiling, but its N * r * p
+        // work factor is 128 times the write-side default -- a corrupted header must not be
+        // able to stall login for tens of seconds either.
+        {
+            reset();
+            account::create(user{"alice", pw});
+            file::vault::write("alice", {credential{"GitHub", "u", "s"}}, pw);
+            set_byte_at(file::vault::path("alice"), 10, 21);
+            set_byte_at(file::vault::path("alice"), 11, 1);
+            set_byte_at(file::vault::path("alice"), 12, 16);
+
+            bool rejected = false;
+            try {
+                (void)file::vault::read("alice", pw);
+            } catch (std::runtime_error const& e) {
+                rejected = std::string{e.what()}.find("unsupported Redux vault format") !=
+                           std::string::npos;
+            } catch (std::exception const&) {
+            }
+            check(rejected, "log2(N) = 21 with r = 1, p = 16 (memory-safe but 128x work) is "
+                            "rejected");
+        }
     }
 
     void a_vault_copied_onto_another_username_is_rejected() {
@@ -618,6 +641,33 @@ namespace {
               "the raw file never contains an unneutralized formula-looking field");
     }
 
+    // "alice.csv" is a name a user can register, and vault files carry no suffix -- so a naive
+    // "<username>.csv" export name would BE that account's vault path, and exporting from
+    // "alice" would replace a whole vault with plaintext CSV. The '@' in the export name is
+    // what makes the collision impossible: it can never appear in a valid username.
+    void csv_export_cannot_overwrite_another_accounts_vault() {
+        section("CSV export stays outside the vault namespace");
+
+        reset();
+
+        check(account::valid_username("alice.csv"), "alice.csv is a name a user could register");
+        account::create(user{"alice.csv", pw});
+        file::vault::write("alice.csv", {credential{"Site", "u", "csv-account-secret"}}, pw);
+
+        check(file::user_files::export_path("alice") !=
+                  file::vault::path("alice.csv").string(),
+              "alice's export path is not alice.csv's vault path");
+
+        file::users::writeToCSV(file::user_files::export_path("alice"),
+                                {credential{"GitHub", "u", "alice-secret"}});
+
+        check(account::valid_password(user{"alice.csv", pw}),
+              "alice.csv's account survived alice's CSV export");
+        auto const survived = file::vault::read("alice.csv", pw);
+        check(survived.size() == 1 && survived[0].password == "csv-account-secret",
+              "alice.csv's vault is intact and still ciphertext");
+    }
+
     void config_dir_fails_closed_instead_of_falling_back_to_the_working_directory() {
         section("fail-closed config directory");
 
@@ -755,6 +805,7 @@ int main() {
              testcase{"username mismatch", a_vault_copied_onto_another_username_is_rejected},
              testcase{"account_lock", account_lock_is_exclusive_and_non_blocking},
              testcase{"CSV export", csv_export_quotes_fields_and_neutralizes_formulas},
+             testcase{"CSV export namespace", csv_export_cannot_overwrite_another_accounts_vault},
              testcase{"fail-closed config dir",
                       config_dir_fails_closed_instead_of_falling_back_to_the_working_directory},
              testcase{"end of input", exhausted_stdin_terminates_instead_of_spinning},
