@@ -17,6 +17,9 @@ jobs:
         # --force: the image ships the clone with local edits that a plain checkout refuses
         # to overwrite; the runner is ephemeral, so discarding them is fine.
         sudo git -C /usr/local/share/vcpkg -c advice.detachedHead=false checkout --force 25b93347d8b1cb83bba83899c85455de050b8d02
+        # The image's vcpkg binary predates the checked-out tree's tool schema; re-bootstrap so
+        # the tool matches the tree it now runs against.
+        sudo /usr/local/share/vcpkg/bootstrap-vcpkg.sh
     - name: build
       run: |
         mkdir build
