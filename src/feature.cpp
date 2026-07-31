@@ -6,6 +6,7 @@
 #include "user.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <iostream>
 #include <vector>
 
@@ -14,13 +15,11 @@ enum confirm {
     no,
 };
 
-void feature::save() const {
-    file::credentials::write(file::user_files::data(username), credentials, password);
-}
+void feature::save() const { file::vault::write(username, credentials, password); }
 
 feature::feature(std::string username_, std::string password_)
     : username{std::move(username_)}, password{std::move(password_)},
-      credentials{file::credentials::read(file::user_files::data(username), password)} {}
+      credentials{file::vault::read(username, password)} {}
 
 static void print_credential(credential const& credential, int const number) {
     std::cout << "\n=========== " << number << " ===========\n"
@@ -52,7 +51,9 @@ void feature::add() {
 }
 
 static bool invalid_id(std::vector<credential> const& credentials, int const id) {
-    return id < 1 || id > credentials.size();
+    // id < 1 is checked (and short-circuits) before the cast, so the conversion to size_t below
+    // never turns a negative id into a huge unsigned value.
+    return id < 1 || static_cast<std::size_t>(id) > credentials.size();
 }
 
 void feature::edit() {
@@ -119,17 +120,12 @@ void feature::export_to_csv(user const& user_) {
         return;
     }
 
-    std::string file_name = file::user_files::filePath(user_.name) + ".csv";
+    std::string const file_name = file::user_files::filePath(user_.name) + ".csv";
 
-    for_each(cbegin(credentials), cend(credentials),
-             [n = 1, file_name](auto const& credential) mutable {
-                 // ToDO: add a check for the file existence
-                 // ToDO: Make unique file name(with username)
-                 file::users::writeToCSV(file_name, credential, n);
-                 ++n;
-             });
+    file::users::writeToCSV(file_name, credentials);
 
-    std::cout << "\nData Saved to "<<file_name<<"\n\n\n";
+    std::cout << "\nData Saved to " << file_name
+              << " (plaintext -- anyone with access to this file can read it)\n\n\n";
 
     input::enter();
 }

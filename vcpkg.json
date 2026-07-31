@@ -1,0 +1,8 @@
+{
+  "name": "redux",
+  "version-string": "1.11",
+  "dependencies": [
+    "cryptopp"
+  ],
+  "builtin-baseline": "25b93347d8b1cb83bba83899c85455de050b8d02"
+}

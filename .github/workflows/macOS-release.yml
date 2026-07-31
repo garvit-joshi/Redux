@@ -7,17 +7,18 @@ jobs:
     runs-on: macos-26
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
     - name: build
       run: |
-        vcpkg install cryptopp:arm64-osx
         mkdir build
         cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         cmake --build .
         strip src/Redux
+    - name: test
+      run: ctest --test-dir build --output-on-failure
     - name: Upload macOS Application
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: macOS Application
         path: /Users/runner/work/Redux/Redux/build/src/Redux

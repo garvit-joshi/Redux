@@ -1,25 +1,14 @@
 #ifndef STR_H
 #define STR_H
 
-#ifdef _WIN32
-#include <ostream>
-#endif
-
 namespace str {
     using str_type = char const* const;
 
-#ifdef _WIN32
-    struct clear_screen {};
-    constexpr clear_screen clear_screen;
-
-    inline std::ostream& operator<<(std::ostream& os, struct clear_screen const&) {
-        system("cls");
-        return os;
-    }
-
-#else
+    // Shelling out to "cls" used to be the Windows path here (and drew antivirus complaints for
+    // it -- see the README). The ANSI escape works everywhere Redux runs now; Windows consoles
+    // just need ENABLE_VIRTUAL_TERMINAL_PROCESSING turned on first, which utils::enable_vt()
+    // does once at startup.
     str_type clear_screen = "\033[2J\033[1;1H";
-#endif // _WIN32
 
     str_type startup = R"(
               Welcome to Redux
@@ -96,6 +85,7 @@ namespace str {
     str_type username_prefix = "Enter your Username [";
     str_type username_suffix = "]: ";
     str_type password_again = "\nFor Security Reasons please enter your password again";
+    str_type password_mismatch = "Passwords do not match.\n\n";
 
     str_type choice = "Enter your choice: ";
     str_type empty = "Empty.\n";
@@ -108,6 +98,7 @@ namespace str {
     str_type ac_not_exists = "'s account doesn't exists.\n\n";
     str_type ac_pass_incorrect = "'s password is not correct.\n\n";
     str_type ac_already_exists = "'s account is already exists.\n\n";
+    str_type ac_in_use = "'s account is in use by another Redux instance.\n\n";
     str_type invalid_username =
         "A username must start with a letter or digit and may contain only letters, digits, "
         "'.', '-' and '_', up to 64 characters.\n\n";

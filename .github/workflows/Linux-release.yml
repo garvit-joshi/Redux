@@ -7,10 +7,9 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
     - name: build
       run: |
-        vcpkg install cryptopp
         sudo apt install g++-11
         g++ --version
         mkdir build
@@ -22,7 +21,7 @@ jobs:
     - name: strip
       run: strip build/src/Redux
     - name: Upload Ubuntu Application
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: Linux-Application
         path: /home/runner/work/Redux/Redux/build/src/Redux
