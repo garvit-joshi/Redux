@@ -8,6 +8,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7.0.1
+    # The image's bundled vcpkg clone predates the manifest's builtin-baseline, and vcpkg does
+    # not fetch on its own -- without this, resolving the pinned versions database fails.
+    - name: fetch vcpkg baseline
+      run: sudo git -C /usr/local/share/vcpkg fetch origin 25b93347d8b1cb83bba83899c85455de050b8d02
     - name: build
       run: |
         sudo apt install g++-11
