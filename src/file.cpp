@@ -82,6 +82,12 @@ namespace {
     constexpr std::uint8_t min_p = 1;
     constexpr std::uint8_t max_p = 16;
 
+    // The per-parameter ranges alone still admit combinations whose scrypt working set
+    // (128 * N * r bytes) reaches 64 GiB -- enough for one corrupted header to OOM the process
+    // before the GCM tag can reject it. The product is what has to be bounded; this ceiling sits
+    // comfortably above anything write() produces (32 MiB today) while staying survivable.
+    constexpr std::uint64_t max_scrypt_memory = 256ull * 1024 * 1024;
+
     constexpr char magic[magic_size] = {'R', 'E', 'D', 'U', 'X', 'V', 'L', 'T'};
 
     // --- owner-only permissions -------------------------------------------------------------
@@ -444,6 +450,10 @@ namespace file::vault {
         if (r < min_r || r > max_r || p_param < min_p || p_param > max_p) {
             throw std::runtime_error{
                 "unsupported Redux vault format: unreasonable scrypt parameters"};
+        }
+        if ((128ull << log2n) * r > max_scrypt_memory) {
+            throw std::runtime_error{
+                "unsupported Redux vault format: unreasonable scrypt memory cost"};
         }
         if (salt_len != salt_size || nonce_len != nonce_size) {
             throw std::runtime_error{

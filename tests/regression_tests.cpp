@@ -456,6 +456,27 @@ namespace {
         check(rejected_as_unsupported(11, 0), "r = 0 is rejected");
         check(rejected_as_unsupported(12, 200), "p = 200 is rejected without deriving a key");
         check(rejected_as_unsupported(12, 0), "p = 0 is rejected");
+
+        // Individually, log2(N) = 24 and r = 32 each pass their own range check; combined, the
+        // scrypt working set is 128 * 2^24 * 32 = 64 GiB. The product ceiling has to reject the
+        // pair before key derivation -- per-parameter bounds alone cannot.
+        {
+            reset();
+            account::create(user{"alice", pw});
+            file::vault::write("alice", {credential{"GitHub", "u", "s"}}, pw);
+            set_byte_at(file::vault::path("alice"), 10, 24);
+            set_byte_at(file::vault::path("alice"), 11, 32);
+
+            bool rejected = false;
+            try {
+                (void)file::vault::read("alice", pw);
+            } catch (std::runtime_error const& e) {
+                rejected = std::string{e.what()}.find("unsupported Redux vault format") !=
+                           std::string::npos;
+            } catch (std::exception const&) {
+            }
+            check(rejected, "log2(N) = 24 with r = 32 (64 GiB combined) is rejected");
+        }
     }
 
     void a_vault_copied_onto_another_username_is_rejected() {

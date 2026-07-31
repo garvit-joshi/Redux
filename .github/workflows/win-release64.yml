@@ -9,9 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@v7.0.1
     # The image's bundled vcpkg clone predates the manifest's builtin-baseline, and vcpkg does
-    # not fetch on its own -- without this, resolving the pinned versions database fails.
-    - name: fetch vcpkg baseline
-      run: git -C C:/vcpkg fetch origin 25b93347d8b1cb83bba83899c85455de050b8d02
+    # not fetch on its own. Fetching alone is not enough either: vcpkg reads the versions
+    # database and ports from the checked-out tree, so the baseline has to be checked out too.
+    - name: pin vcpkg to the manifest baseline
+      run: |
+        git -C C:/vcpkg fetch origin 25b93347d8b1cb83bba83899c85455de050b8d02
+        git -C C:/vcpkg -c advice.detachedHead=false checkout 25b93347d8b1cb83bba83899c85455de050b8d02
     - name: build
       run: |
         cmake -G "Visual Studio 17 2022" -A x64 -S . -B "build64" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
