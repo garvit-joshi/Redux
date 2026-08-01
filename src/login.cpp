@@ -8,6 +8,7 @@
 #include "utils.h"
 
 #include <iostream>
+#include <optional>
 #include <string>
 #include <utility>
 
@@ -15,6 +16,20 @@ namespace login {
     static void exceeds_attempt() {
         std::cout << str::clear_screen;
         input::enter(str::exceeds_attempt);
+    }
+
+    // Acquired non-blocking right after the username is validated, and held by the caller for
+    // the whole session: a second Redux instance signed into the same account could otherwise
+    // race a read-modify-write cycle (most visibly change_password) against this one.
+    static bool acquire_lock(std::string const& username, std::optional<file::account_lock>& lock) {
+        try {
+            lock.emplace(username);
+            return true;
+        } catch (file::account_busy const&) {
+            std::cout << username << str::ac_in_use;
+            input::enter();
+            return false;
+        }
     }
 
     static auto valid_username() {
@@ -70,6 +85,11 @@ namespace login {
         if (auto [valid, username] = valid_username(); valid) {
             user.name = username;
         } else {
+            return;
+        }
+
+        std::optional<file::account_lock> lock;
+        if (!acquire_lock(user.name, lock)) {
             return;
         }
 

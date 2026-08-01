@@ -1,10 +1,13 @@
 #include "input.h"
 #include "startup_services.h"
+#include "utils.h"
 
 #include <exception>
 #include <iostream>
 
 int main() {
+    utils::enable_vt();
+
     try {
         startup_services::run();
     } catch (input::end_of_input const&) {

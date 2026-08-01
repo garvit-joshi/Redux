@@ -3,9 +3,10 @@
 #include "file.h"
 #include "user.h"
 
+#include <cryptopp/filters.h>
+
 #include <algorithm>
 #include <cctype>
-#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -17,58 +18,51 @@ namespace account {
             return false;
         }
 
-        auto is_alnum = [](char c) {
-            return std::isalnum(static_cast<unsigned char>(c)) != 0;
-        };
+        auto is_alnum = [](char c) { return std::isalnum(static_cast<unsigned char>(c)) != 0; };
 
         // Requiring an alphanumeric first character rules out ".", "..", and Redux's own
-        // dot-prefixed state files in one go.
+        // dot-prefixed state files (lock files, staging files, ".last_user") in one go.
         if (!is_alnum(username.front())) {
             return false;
         }
 
-        return std::all_of(username.begin(), username.end(), [&](char c) {
-            return is_alnum(c) || c == '_' || c == '-' || c == '.';
-        });
+        return std::all_of(username.begin(), username.end(),
+                           [&](char c) { return is_alnum(c) || c == '_' || c == '-' || c == '.'; });
     }
 
-    bool exists(std::string const& username) {
-        return std::filesystem::exists(file::user_files::filePath(username));
-    }
+    bool exists(std::string const& username) { return file::vault::exists(username); }
 
     bool valid_password(user const& user) {
-        // The account file's plaintext is exactly the username, so decrypting it both
-        // authenticates (via the MAC) and sanity-checks. Nothing is written, so a failed attempt
-        // cannot leave the file in a state that locks the account out.
+        // A wrong password and a tampered vault are cryptographically indistinguishable, and
+        // HashVerificationFailed is the only exception that means one of those two things.
+        // Everything else -- an I/O failure, an unrecognized header, a vault whose recorded
+        // username does not match `user.name` -- is a different problem, and must not be
+        // reported as "wrong password": it propagates so the caller's handler can report what
+        // actually happened.
         try {
-            return file::crypt::read_decrypted(file::user_files::account(user.name),
-                                               user.password) == user.name;
-        } catch (...) {
+            file::vault::read(user.name, user.password);
+            return true;
+        } catch (CryptoPP::HashVerificationFilter::HashVerificationFailed const&) {
             return false;
         }
     }
 
-    void create(user const& user) {
-        namespace uf = file::user_files;
+    already_exists::already_exists(std::string const& username)
+        : std::runtime_error{"account '" + username + "' already exists"} {}
 
-        file::crypt::write_encrypted(uf::account(user.name), user.name, user.password);
-        file::crypt::write_encrypted(uf::data(user.name), "", user.password);
+    void create(user const& user) {
+        // Rechecked here, under the caller's account lock, rather than trusting the pre-lock
+        // availability check: another process can register the same name between that check and
+        // this call (its lock is released when its session ends), and the second create must
+        // not replace the first user's vault.
+        if (exists(user.name)) {
+            throw already_exists{user.name};
+        }
+        file::vault::write(user.name, {}, user.password);
     }
 
     void change_password(user const& user, std::string const& password) {
-        namespace uf = file::user_files;
-
-        // Re-encrypt the vault itself under the new password. Nothing else does this: the files
-        // are always encrypted at rest, so there is no logout step left to pick it up.
-        //
-        // Going through file::credentials rather than crypt directly means an absent vault is
-        // handled here exactly as it is everywhere else, instead of throwing from a code path
-        // that menu item 7 reaches directly.
-        auto const credentials = file::credentials::read(uf::data(user.name), user.password);
-        file::credentials::write(uf::data(user.name), credentials, password);
-
-        // Each write is individually atomic, but the pair is not: an interruption between them
-        // leaves the vault on the new password and the account file on the old one.
-        file::crypt::write_encrypted(uf::account(user.name), user.name, password);
+        auto const credentials = file::vault::read(user.name, user.password);
+        file::vault::write(user.name, credentials, password);
     }
 } // namespace account

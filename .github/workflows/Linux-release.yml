@@ -7,10 +7,21 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
+    # The image's bundled vcpkg clone predates the manifest's builtin-baseline, and vcpkg does
+    # not fetch on its own. Fetching alone is not enough either: vcpkg reads the versions
+    # database and ports from the checked-out tree, so the baseline has to be checked out too.
+    - name: pin vcpkg to the manifest baseline
+      run: |
+        sudo git -C /usr/local/share/vcpkg fetch origin 25b93347d8b1cb83bba83899c85455de050b8d02
+        # --force: the image ships the clone with local edits that a plain checkout refuses
+        # to overwrite; the runner is ephemeral, so discarding them is fine.
+        sudo git -C /usr/local/share/vcpkg -c advice.detachedHead=false checkout --force 25b93347d8b1cb83bba83899c85455de050b8d02
+        # The image's vcpkg binary predates the checked-out tree's tool schema; re-bootstrap so
+        # the tool matches the tree it now runs against.
+        sudo /usr/local/share/vcpkg/bootstrap-vcpkg.sh
     - name: build
       run: |
-        vcpkg install cryptopp
         sudo apt install g++-11
         g++ --version
         mkdir build
@@ -22,7 +33,7 @@ jobs:
     - name: strip
       run: strip build/src/Redux
     - name: Upload Ubuntu Application
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: Linux-Application
         path: /home/runner/work/Redux/Redux/build/src/Redux
