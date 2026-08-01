@@ -668,6 +668,50 @@ namespace {
               "alice.csv's vault is intact and still ciphertext");
     }
 
+    // Two processes can both see a username as free before either creates it: the availability
+    // check runs before the lock, and the winner's lock is released when its session ends. The
+    // under-lock recheck in account::create is what must stop the loser from replacing the
+    // winner's vault with one keyed to its own password.
+    void create_refuses_to_replace_an_existing_account() {
+        section("create cannot clobber an existing account");
+
+        reset();
+        account::create(user{"alice", pw});
+        file::vault::write("alice", {credential{"GitHub", "u", "gh-s3cret"}}, pw);
+
+        bool threw = false;
+        try {
+            account::create(user{"alice", "the-losers-password"});
+        } catch (account::already_exists const&) {
+            threw = true;
+        }
+        check(threw, "a second create for the same name throws already_exists");
+        check(account::valid_password(user{"alice", pw}), "the original password still works");
+        check(!account::valid_password(user{"alice", "the-losers-password"}),
+              "the racing password never took effect");
+        auto const creds = file::vault::read("alice", pw);
+        check(creds.size() == 1 && creds[0].password == "gh-s3cret",
+              "the original vault contents survived");
+    }
+
+    // The old format's account verifier lived at the exact path the vault now uses. There is
+    // deliberately no migration, so a leftover legacy file must read as "no account" -- login
+    // reports the account as absent instead of dying on bad magic, and signup can reclaim the
+    // name -- rather than squatting the username forever.
+    void a_legacy_file_does_not_squat_the_username() {
+        section("legacy files are reclaimable");
+
+        reset();
+        std::ofstream{file::vault::path("alice"), std::ios::binary}
+            << "legacy-format account verifier, no REDUXVLT magic";
+
+        check(!account::exists("alice"), "a file without the vault magic is not an account");
+
+        account::create(user{"alice", pw});
+        check(account::exists("alice"), "signup reclaimed the name");
+        check(account::valid_password(user{"alice", pw}), "the recreated account works");
+    }
+
     void config_dir_fails_closed_instead_of_falling_back_to_the_working_directory() {
         section("fail-closed config directory");
 
@@ -806,6 +850,8 @@ int main() {
              testcase{"account_lock", account_lock_is_exclusive_and_non_blocking},
              testcase{"CSV export", csv_export_quotes_fields_and_neutralizes_formulas},
              testcase{"CSV export namespace", csv_export_cannot_overwrite_another_accounts_vault},
+             testcase{"create cannot clobber", create_refuses_to_replace_an_existing_account},
+             testcase{"legacy files reclaimable", a_legacy_file_does_not_squat_the_username},
              testcase{"fail-closed config dir",
                       config_dir_fails_closed_instead_of_falling_back_to_the_working_directory},
              testcase{"end of input", exhausted_stdin_terminates_instead_of_spinning},

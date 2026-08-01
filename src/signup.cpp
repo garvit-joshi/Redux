@@ -19,8 +19,9 @@ namespace signup {
     }
 
     // Acquired non-blocking right after the username is validated, and held by the caller for
-    // the whole session. This also protects signup itself: two processes racing to register the
-    // same username can no longer both reach account::create for it.
+    // the whole session. The lock alone cannot serialize two signups for the same name -- the
+    // winner's lock is released when its session ends, and the loser then acquires it freely.
+    // It is account::create's under-lock existence recheck that closes that race.
     static bool acquire_lock(std::string const& username, std::optional<file::account_lock>& lock) {
         try {
             lock.emplace(username);
@@ -119,7 +120,15 @@ namespace signup {
         if (auto [valid, password] = confirmed_password(); valid) {
             user.password = password;
 
-            account::create(user);
+            try {
+                account::create(user);
+            } catch (account::already_exists const&) {
+                // Another instance registered this name while we were prompting. Its vault must
+                // not be replaced -- the name is simply taken now.
+                std::cout << user.name << str::ac_already_exists;
+                input::enter();
+                return;
+            }
 
             file::last_user::save(user.name);
 

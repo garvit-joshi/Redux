@@ -9,6 +9,7 @@
 
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -371,7 +372,18 @@ namespace file::vault {
 
     std::filesystem::path path(std::string const& username) { return config_dir() / username; }
 
-    bool exists(std::string const& username) { return std::filesystem::exists(path(username)); }
+    // Existence means "a current-format vault", not just "a file with this name". The old
+    // format's account verifier lived at this exact path, and there is deliberately no
+    // migration -- if its mere presence counted, it would squat the username forever: signup
+    // would refuse the name and login could never read it. A file without the magic is treated
+    // as absent, so signing up reclaims the name (and overwrites the stale file).
+    bool exists(std::string const& username) {
+        std::ifstream in{path(username), std::ios::binary};
+        char head[magic_size] = {};
+        in.read(head, magic_size);
+        return in.gcount() == static_cast<std::streamsize>(magic_size) &&
+               std::memcmp(head, magic, magic_size) == 0;
+    }
 
     void write(std::string const& username, std::vector<credential> const& credentials,
                std::string const& password) {

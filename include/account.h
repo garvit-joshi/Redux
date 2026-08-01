@@ -1,11 +1,20 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
+#include <stdexcept>
 #include <string>
 
 struct user;
 
 namespace account {
+    // Thrown by create() when a current-format vault already exists for the username. create()
+    // always runs under the account lock, so this recheck is what actually closes the signup
+    // race: two processes can both see a name as free before either creates it, and without
+    // this the loser would silently replace the winner's vault with its own password.
+    struct already_exists : std::runtime_error {
+        explicit already_exists(std::string const& username);
+    };
+
     // A username becomes a filename, so it must not be able to alter the path it builds. Rejects
     // separators, traversal, absolute paths, and names that could collide with Redux's own state
     // files. Check this before any path is derived from a username.
@@ -19,6 +28,8 @@ namespace account {
     // password.
     bool valid_password(user const&);
 
+    // Throws already_exists rather than replacing a vault that appeared since the caller's
+    // availability check. Must be called holding the account lock.
     void create(user const&);
 
     // Reads the vault under the old password and writes it once under the new one: a single

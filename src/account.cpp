@@ -47,7 +47,19 @@ namespace account {
         }
     }
 
-    void create(user const& user) { file::vault::write(user.name, {}, user.password); }
+    already_exists::already_exists(std::string const& username)
+        : std::runtime_error{"account '" + username + "' already exists"} {}
+
+    void create(user const& user) {
+        // Rechecked here, under the caller's account lock, rather than trusting the pre-lock
+        // availability check: another process can register the same name between that check and
+        // this call (its lock is released when its session ends), and the second create must
+        // not replace the first user's vault.
+        if (exists(user.name)) {
+            throw already_exists{user.name};
+        }
+        file::vault::write(user.name, {}, user.password);
+    }
 
     void change_password(user const& user, std::string const& password) {
         auto const credentials = file::vault::read(user.name, user.password);
